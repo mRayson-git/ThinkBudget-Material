@@ -1,1 +1,199 @@
 /* You can add global styles to this file, and also import other style files */
+// @import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+
+//Setting up our own theme
+@use '@angular/material' as mat;
+@include mat.core();
+
+/* For use in src/lib/core/theming/_palette.scss */
+$md-primary: (
+    50 : #e6f1e1,
+    100 : #c2ddb4,
+    200 : #99c682,
+    300 : #70af4f,
+    400 : #519e2a,
+    500 : #328d04,
+    600 : #2d8503,
+    700 : #267a03,
+    800 : #1f7002,
+    900 : #135d01,
+    A100 : #9bff8e,
+    A200 : #6eff5b,
+    A400 : #41ff28,
+    A700 : #2bff0e,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+//custom accent palette
+$md-accent: (
+    50 : #fdf8e6,
+    100 : #fbedc2,
+    200 : #f8e199,
+    300 : #f5d470,
+    400 : #f3cb51,
+    500 : #f1c232,
+    600 : #efbc2d,
+    700 : #edb426,
+    800 : #ebac1f,
+    900 : #e79f13,
+    A100 : #ffffff,
+    A200 : #fff4e2,
+    A400 : #ffe2af,
+    A700 : #ffd896,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #000000,
+        600 : #000000,
+        700 : #000000,
+        800 : #000000,
+        900 : #000000,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+// custom palette for primary dark
+$md-primarydark: (
+    50 : #e2eaf2,
+    100 : #b6cbdf,
+    200 : #85a9ca,
+    300 : #5487b4,
+    400 : #306da4,
+    500 : #0b5394,
+    600 : #0a4c8c,
+    700 : #084281,
+    800 : #063977,
+    900 : #032965,
+    A100 : #95b6ff,
+    A200 : #6294ff,
+    A400 : #2f71ff,
+    A700 : #155fff,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #ffffff,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #ffffff,
+        A700 : #ffffff,
+    )
+);
+
+/* For use in src/lib/core/theming/_palette.scss */
+$md-accentdark: (
+    50 : #e4ece1,
+    100 : #bccfb4,
+    200 : #90af82,
+    300 : #638e50,
+    400 : #41762b,
+    500 : #205e05,
+    600 : #1c5604,
+    700 : #184c04,
+    800 : #134203,
+    900 : #0b3101,
+    A100 : #7bff69,
+    A200 : #4eff36,
+    A400 : #21ff03,
+    A700 : #1be900,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #ffffff,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+$think-app-primary: mat.define-palette($md-primary);
+$think-app-accent:  mat.define-palette($md-accent, A200, A100, A400);
+$think-app-warn:    mat.define-palette(mat.$red-palette);
+
+$theme-light: mat.define-light-theme(
+    $think-app-primary, $think-app-accent, $think-app-warn
+);
+
+@include mat.all-component-themes($theme-light);
+
+.dark-theme {
+    $primary-dark: mat.define-palette($md-primary);
+    $accent-dark: mat.define-palette($md-accentdark);
+    $warn-dark: mat.define-palette(mat.$red-palette);
+
+    $theme-dark: mat.define-dark-theme($primary-dark, $accent-dark, $warn-dark);
+
+    @include mat.all-component-themes($theme-dark);
+
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.max {
+    height: 100%;
+}
+
+.flex-container-h {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.flex-container-v {
+    display: flex;
+    flex-direction: column;
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+.top-space {
+    margin-top: 5px;
+}
+
+.text-primary {
+    color: #2d8503;
+}
+
+.container {
+    margin-left: 20px;
+    margin-right: 20px;
+}

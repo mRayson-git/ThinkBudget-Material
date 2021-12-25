@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Auth, browserSessionPersistence } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,13 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'ThinkBudget-Material';
+  isDarkTheme: boolean = false;
+
+  constructor(public auth: Auth) {
+    this.auth.setPersistence(browserSessionPersistence);
+  }
+
+  toggleTheme() {
+    this.isDarkTheme = !this.isDarkTheme;
+  }
 }
