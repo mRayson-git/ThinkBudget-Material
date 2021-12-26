@@ -3,7 +3,7 @@
     <div class="flex-container-h">
         <span><h1>Login</h1></span>
         <span class="spacer"></span>
-        <button mat-button color="primary" (click)='toggleRegister()'> Register
+        <button mat-button color="primary" (click)='toggleRegister()'>Register
             <mat-icon>add</mat-icon>
         </button>
     </div>
@@ -12,6 +12,7 @@
         <mat-form-field appearance="fill">
             <mat-label>Email</mat-label>
             <input matInput type="text" formControlName="email">
+            <mat-error>Required.</mat-error>
         </mat-form-field>
         <mat-form-field appearance="fill">
             <mat-label>Password</mat-label>
@@ -26,7 +27,7 @@
     <div class="flex-container-h">
         <span><h1>Register</h1></span>
         <span class="spacer"></span>
-        <button mat-button color="primary" (click)='toggleRegister()'> Login
+        <button mat-button color="primary" (click)='toggleRegister()'>Login
             <mat-icon>login</mat-icon>
         </button>
     </div>

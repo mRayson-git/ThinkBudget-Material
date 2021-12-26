@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { AuthGuard } from '@angular/fire/auth-guard';
 import { RouterModule, Routes } from '@angular/router';
 import { HomepageComponent } from './core/homepage/homepage.component';
 import { MissingComponent } from './core/missing/missing.component';
@@ -6,6 +7,7 @@ import { MissingComponent } from './core/missing/missing.component';
 const routes: Routes = [
   { path: 'home', component: HomepageComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: 'account', loadChildren: () => import('./account/account.module').then(m => m.AccountModule), canActivate: [AuthGuard] },
   { path: '**', component: MissingComponent },
 ];
 

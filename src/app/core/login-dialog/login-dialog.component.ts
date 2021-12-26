@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@angular/fire/auth';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { signInWithPopup } from '@firebase/auth';
 import { checkPasswords } from '../validators/password';
-import firebase from 'firebase/compat/app';
 
 @Component({
   selector: 'app-login-dialog',
@@ -15,7 +13,7 @@ export class LoginDialogComponent implements OnInit {
 
   isRegistered: boolean = true;
   accountForm: FormGroup = new FormGroup({
-    email: new FormControl(''),
+    email: new FormControl([''], Validators.required),
     password: new FormControl(''),
     confirmPassword: new FormControl(''),
   }, { validators: checkPasswords });
@@ -24,8 +22,7 @@ export class LoginDialogComponent implements OnInit {
     public auth: Auth) { }
 
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
   toggleRegister() {
     this.isRegistered = !this.isRegistered;

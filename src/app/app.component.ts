@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Auth, browserSessionPersistence } from '@angular/fire/auth';
+import { Auth, inMemoryPersistence } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +11,7 @@ export class AppComponent {
   isDarkTheme: boolean = false;
 
   constructor(public auth: Auth) {
-    this.auth.setPersistence(browserSessionPersistence);
+    this.auth.setPersistence(inMemoryPersistence);
   }
 
   toggleTheme() {

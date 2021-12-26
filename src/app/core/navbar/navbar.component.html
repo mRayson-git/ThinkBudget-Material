@@ -1,8 +1,14 @@
 <div>
     <mat-toolbar color="primary">
-        <span>ThinkBudget</span>
+        <button mat-button routerLink="/home" style="font-size: larger;">ThinkBudget</button>
+        <div *ngIf="auth.currentUser">
+            <button mat-button [matMenuTriggerFor]="accountMenu">Account</button>
+            <mat-menu #accountMenu>
+                <a mat-menu-item routerLink="/account">Information</a>
+            </mat-menu>
+        </div>
         <span class="spacer"></span>
-        <div *ngIf="auth.currentUser; else notLoggedIn">            
+        <div *ngIf="auth.currentUser; else notLoggedIn">      
             <button mat-button (click)="logout()">Logout
                 <mat-icon>logout</mat-icon>
             </button>

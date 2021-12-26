@@ -15,19 +15,17 @@ export class NavbarComponent implements OnInit {
   constructor(public dialog: MatDialog,
     public auth: Auth) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void { 
     console.log(this.auth.currentUser);
   }
 
   login() {
-    console.log(this.auth.currentUser);
     const loginDialogRef = this.dialog.open(LoginDialogComponent, {
-      minWidth: '600px',
+      minWidth: '400px',
     });
 
     loginDialogRef.afterClosed().subscribe(result => {
       console.log('Login has completed');
-      console.log(this.auth.currentUser);
     });
   }
 
