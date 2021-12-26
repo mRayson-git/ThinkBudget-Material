@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CSVParsingProfile } from 'src/app/models/csvparsing-profile';
+import { CsvparserService } from 'src/app/services/csvparser.service';
 import { LayoutDialogComponent } from './layout-dialog/layout-dialog.component';
 
 @Component({
@@ -12,9 +13,11 @@ export class ParsersComponent implements OnInit {
 
   parsers?: CSVParsingProfile[];
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog,
+    public parserService: CsvparserService) { }
 
   ngOnInit(): void {
+    this.parserService.getParsers().subscribe(parsers => this.parsers = parsers);
   }
 
   addLayout(): void {

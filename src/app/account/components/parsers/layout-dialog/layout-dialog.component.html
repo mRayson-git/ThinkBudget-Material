@@ -2,27 +2,27 @@
     <mat-card-title>Add a layout</mat-card-title>
     <mat-card-content>
         <!-- Form goes in here -->
-        <form class="flex-container-v">
+        <form class="flex-container-v" [formGroup]="layoutForm">
             <mat-form-field>
                 <mat-label>Parser Name</mat-label>
-                <input matInput type="text">
+                <input matInput type="text" formControlName="profileName">
             </mat-form-field>
-            <mat-checkbox>Header?</mat-checkbox>
+            <mat-checkbox formControlName="hasHeader">Header?</mat-checkbox>
             <mat-form-field>
                 <mat-label>Amount Column</mat-label>
-                <input matInput type="number">
+                <input matInput type="number" formControlName="amountCol">
             </mat-form-field>
             <mat-form-field>
                 <mat-label>Date Column</mat-label>
-                <input matInput type="number">
+                <input matInput type="number" formControlName="dateCol">
             </mat-form-field>
             <mat-form-field>
                 <mat-label>Payee Column</mat-label>
-                <input matInput type="number">
+                <input matInput type="number" formControlName="payeeCol">
             </mat-form-field>
             <mat-form-field>
                 <mat-label>Type Column</mat-label>
-                <input matInput type="number">
+                <input matInput type="number" formControlName="typeCol">
             </mat-form-field>
         </form>
     </mat-card-content>

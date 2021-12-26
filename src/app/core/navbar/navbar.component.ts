@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 
 @Component({
@@ -13,7 +14,8 @@ export class NavbarComponent implements OnInit {
   @Output() toggleTheme = new EventEmitter<void>();
 
   constructor(public dialog: MatDialog,
-    public auth: Auth) { }
+    public auth: Auth,
+    public router: Router) { }
 
   ngOnInit(): void { 
     console.log(this.auth.currentUser);
@@ -30,7 +32,10 @@ export class NavbarComponent implements OnInit {
   }
 
   logout() {
-    this.auth.signOut().then(result => console.log('Signed out!'));
+    this.auth.signOut().then(result => {
+      console.log('Signed out!');
+      this.router.navigate(['/home']);
+    });
   }
 
 }

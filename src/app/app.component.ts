@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Auth, inMemoryPersistence } from '@angular/fire/auth';
+import { Auth, browserSessionPersistence, inMemoryPersistence } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-root',

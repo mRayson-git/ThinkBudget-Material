@@ -11,7 +11,7 @@ import { EMPTY, Observable } from 'rxjs';
 export class SettingsComponent implements OnInit {
 
   public userState: Observable<User | null> = EMPTY;
-  user?: User | null;
+  currUser?: User | null;
 
   accountForm: FormGroup = new FormGroup({
     email: new FormControl(''),
@@ -20,10 +20,8 @@ export class SettingsComponent implements OnInit {
 
   constructor(public auth: Auth) {
     // get current user information
-    authState(auth).subscribe(user => {
-      this.user = user;
-      this.accountForm.get('email')?.setValue(user?.email);
-    });
+    this.currUser = auth.currentUser;
+    this.accountForm.get('email')?.setValue(this.currUser?.email);
   }
 
   ngOnInit(): void { }
