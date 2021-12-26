@@ -1,0 +1,9 @@
+<div class="container">
+    <h1>File Layouts</h1>
+    <div *ngIf="!parsers || parsers.length == 0">
+        <p>You have not specified any csv file layouts for importing your transactions, please add them here.</p>
+        <button mat-raised-button color="primary" (click)="addLayout()">Add layout
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
+</div>

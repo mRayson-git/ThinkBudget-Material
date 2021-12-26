@@ -17,13 +17,13 @@
         <button mat-button (click)="login()">Login 
             <mat-icon>login</mat-icon>
         </button>
-        <button mat-icon-button [matMenuTriggerFor]="menu">
-            <mat-icon>menu</mat-icon>
-        </button>
-        <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="toggleTheme.emit()">Toggle Theme</button>
-        </mat-menu>
     </ng-template>
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="toggleTheme.emit()">Toggle Theme</button>
+    </mat-menu>
 </mat-toolbar>
 
 

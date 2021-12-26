@@ -1,0 +1,37 @@
+<mat-card>
+    <mat-card-title>Add a layout</mat-card-title>
+    <mat-card-content>
+        <!-- Form goes in here -->
+        <form class="flex-container-v">
+            <mat-form-field>
+                <mat-label>Parser Name</mat-label>
+                <input matInput type="text">
+            </mat-form-field>
+            <mat-checkbox>Header?</mat-checkbox>
+            <mat-form-field>
+                <mat-label>Amount Column</mat-label>
+                <input matInput type="number">
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Date Column</mat-label>
+                <input matInput type="number">
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Payee Column</mat-label>
+                <input matInput type="number">
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Type Column</mat-label>
+                <input matInput type="number">
+            </mat-form-field>
+        </form>
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-raised-button color="primary" (click)="saveLayout()">Add layout
+            <mat-icon>add</mat-icon>
+        </button>
+        <button mat-raised-button color="warn" (click)="close()">Cancel
+            <mat-icon>close</mat-icon>
+        </button>
+    </mat-card-actions>
+</mat-card>
