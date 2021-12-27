@@ -1,0 +1,53 @@
+<h3 *ngIf="data == null; else update">Add A Transaction</h3>
+<ng-template #update><h3>Edit Transaction</h3></ng-template>
+<form [formGroup]="transForm" class="flex-container-v">
+    <mat-form-field appearance="fill">
+        <mat-label>Account Name</mat-label>
+        <input matInput type="text" formControlName="bankAccountName">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Payee</mat-label>
+        <input matInput type="text" formControlName="transPayee">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Type</mat-label>
+        <input matInput type="text" formControlName="transType">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Amount</mat-label>
+        <input matInput type="text" formControlName="transAmount">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="transDate">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Category</mat-label>
+        <mat-select formControlName="transCategory">
+            <mat-option>Choose a category</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Note</mat-label>
+        <textarea matInput formControlName="transNote"></textarea>
+    </mat-form-field>
+    <div class="flex-container-h">
+        <button mat-raised-button *ngIf="data == null; else updateBtn" color="primary" (click)="addTrans()">Add
+            <mat-icon>add</mat-icon>
+        </button>
+        <ng-template #updateBtn>
+            <button mat-raised-button color="primary" (click)="updateTrans()">Update
+                <mat-icon>update</mat-icon>
+            </button>
+        </ng-template>
+        <button mat-raised-button color="warn" style="margin-left: 10px;" (click)="deleteTrans()">Delete
+            <mat-icon>trash</mat-icon>
+        </button>
+        <span class="spacer"></span>
+        <button mat-mini-fab color="warn" (click)="close()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+</form>

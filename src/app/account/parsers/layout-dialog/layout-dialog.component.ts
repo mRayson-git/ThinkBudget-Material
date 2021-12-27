@@ -55,6 +55,7 @@ export class LayoutDialogComponent implements OnInit {
     layout.id = this.data.parser.id;
     this.parserService.updateParser(layout)
     .then(result => {
+      console.log(layout);
       this.close();
     })
     .catch(err => {

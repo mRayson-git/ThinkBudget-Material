@@ -6,6 +6,10 @@
         <mat-menu #accountMenu>
             <a mat-menu-item routerLink="/account">Information</a>
         </mat-menu>
+        <button mat-button [matMenuTriggerFor]="transactionMenu">Activity</button>
+        <mat-menu #transactionMenu>
+            <a mat-menu-item routerLink="/transaction">Overview</a>
+        </mat-menu>
     </div>
     <span class="spacer"></span>
     <div *ngIf="auth.currentUser; else notLoggedIn">      

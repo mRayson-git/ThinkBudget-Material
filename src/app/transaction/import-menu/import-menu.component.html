@@ -1,0 +1,22 @@
+<h1>Import Transactions</h1>
+<div *ngIf="!parsers">
+    <mat-spinner></mat-spinner>
+</div>
+<div *ngIf="parsers && parsers.length > 0; else noParsers">
+    <form class="flex-container-v" [formGroup]="importForm">
+        <mat-form-field appearance="fill">
+            <mat-label>CSV Layout</mat-label>
+            <mat-select formControlName="parser">
+                <mat-option *ngFor="let parser of parsers" value="{{parser.profileName}}">{{parser.profileName}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <button mat-raised-button [disabled]="importForm.get('parser')!.value == ''" color="primary" (click)="fileInput.click()">CHOOSE FILE
+            <mat-icon>attach_file</mat-icon>
+        </button>
+        <input hidden (change)="onFileSelected($event)" type="file" #fileInput>
+    </form>
+</div>
+<ng-template #noParsers>
+    <p>You dont currently have any csv layouts setup, please make some <a routerLink="/account">here</a>.</p>
+</ng-template>
+
