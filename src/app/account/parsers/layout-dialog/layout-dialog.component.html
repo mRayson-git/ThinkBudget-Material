@@ -1,43 +1,39 @@
-<mat-card>
-    <mat-card-title *ngIf="data == null; else update">Add a layout</mat-card-title>
-    <ng-template #update><mat-card-title>Update layout</mat-card-title></ng-template>
-    <mat-card-content>
-        <!-- Form goes in here -->
-        <form class="flex-container-v" [formGroup]="layoutForm">
-            <mat-form-field>
-                <mat-label>Parser Name</mat-label>
-                <input matInput type="text" formControlName="profileName">
-            </mat-form-field>
-            <mat-checkbox formControlName="hasHeader" style="margin-bottom: 10px;">Header?</mat-checkbox>
-            <mat-form-field>
-                <mat-label>Amount Column</mat-label>
-                <input matInput type="number" formControlName="amountCol">
-            </mat-form-field>
-            <mat-form-field>
-                <mat-label>Date Column</mat-label>
-                <input matInput type="number" formControlName="dateCol">
-            </mat-form-field>
-            <mat-form-field>
-                <mat-label>Payee Column</mat-label>
-                <input matInput type="number" formControlName="payeeCol">
-            </mat-form-field>
-            <mat-form-field>
-                <mat-label>Type Column</mat-label>
-                <input matInput type="number" formControlName="typeCol">
-            </mat-form-field>
-        </form>
-    </mat-card-content>
-    <mat-card-actions>
-        <button *ngIf="data == null; else updateBtn" mat-raised-button color="primary" (click)="saveLayout()">Add layout
-            <mat-icon>add</mat-icon>
-        </button>
-        <ng-template #updateBtn>
-            <button mat-raised-button color="primary" (click)="updateLayout()">Update
-                <mat-icon>update</mat-icon>
-            </button>
-        </ng-template>
-        <button mat-raised-button color="warn" (click)="close()">Cancel
-            <mat-icon>close</mat-icon>
-        </button>
-    </mat-card-actions>
-</mat-card>
+
+<h3 *ngIf="data == null; else update">Add a layout</h3>
+<ng-template #update><h3>Update layout</h3></ng-template>
+<!-- Form goes in here -->
+<form class="flex-container-v" [formGroup]="layoutForm">
+    <mat-form-field>
+        <mat-label>Parser Name</mat-label>
+        <input matInput type="text" formControlName="profileName">
+    </mat-form-field>
+    <mat-checkbox formControlName="hasHeader" style="margin-bottom: 10px;">Header?</mat-checkbox>
+    <mat-form-field>
+        <mat-label>Amount Column</mat-label>
+        <input matInput type="number" formControlName="amountCol">
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Date Column</mat-label>
+        <input matInput type="number" formControlName="dateCol">
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Payee Column</mat-label>
+        <input matInput type="number" formControlName="payeeCol">
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Type Column</mat-label>
+        <input matInput type="number" formControlName="typeCol">
+    </mat-form-field>
+</form>
+<button *ngIf="data == null; else updateBtn" mat-raised-button color="primary" (click)="saveLayout()">Add layout
+    <mat-icon>add</mat-icon>
+</button>
+<ng-template #updateBtn>
+    <button mat-raised-button color="primary" (click)="updateLayout()">Update
+        <mat-icon>update</mat-icon>
+    </button>
+</ng-template>
+<button mat-raised-button color="warn" (click)="close()" style="margin-left: 10px;">Cancel
+    <mat-icon>close</mat-icon>
+</button>
+

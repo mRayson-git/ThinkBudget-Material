@@ -48,6 +48,7 @@ export class ImportMenuComponent implements OnInit {
       data.split('\n').forEach((row, index) => {
         if (!parser.hasHeader || parser.hasHeader && index !=0) {
           const temp = row.split(',');
+          console.log(temp);
           // check for empty row
           if (temp[0] != '') {
             const transaction: Transaction = {
@@ -68,8 +69,11 @@ export class ImportMenuComponent implements OnInit {
   }
 
   cleanString(string: string): string {
-    string = string.split('$').join('');
-    string = string.split('"').join('');
+    if (string) {
+      string = string.split('$').join('');
+      string = string.split('"').join('');
+      return string;
+    }
     return string;
   }
 

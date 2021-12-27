@@ -11,7 +11,7 @@
     </div>
     <ng-template #showParsers>
         <div class="flex-container-v">
-            <mat-card *ngFor="let parser of parsers" class="list-item">
+            <mat-card *ngFor="let parser of parsers" class="list-item" (click)="updateParser(parser)">
                 <mat-card-content>
                     <div class="flex-container-h">
                         <span>{{parser.profileName}}</span>

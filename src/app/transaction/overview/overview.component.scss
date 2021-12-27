@@ -1,32 +1,57 @@
 .table-container {
-    overflow: auto;
-    max-height: 300px;
+  overflow: auto;
+  max-height: 300px;
 }
 
 .table-container-all {
-    overflow-x: auto;
-}
-
-table {
-    width: 100%;
+  overflow-x: auto;
 }
 
 .mat-column-account_name {
-    padding: 10px;
+  padding: 10px;
+  flex: 1 1 30px;
+  justify-content: center;
 }
 
 .mat-column-trans_type {
-    padding: 10px;
+  padding: 10px;
+  flex: 1 1 30px;
+  justify-content: center;
 }
 
 .mat-column-trans_amount {
-    padding: 10px;
+  padding: 10px;
+  flex: 0 1 50px;
+  justify-content: center;
 }
 
 .mat-column-trans_date {
-    padding: 10px;
+  padding: 10px;
+  flex: 1 1 30px;
+  justify-content: center;
 }
 
 .mat-column-trans_payee {
-    padding: 10px;
+  padding: 10px;
+  flex: 1 1 30px;
+  justify-content: center;
+}
+
+.mat-column-trans_category {
+  padding: 10px;
+  flex: 1 1 30px;
+  justify-content: center;
+}
+.mat-column-trans_note {
+  padding: 10px;
+  flex: 0 0 30px;
+  justify-content: center;
+}
+
+.neg {
+  color: rgb(199, 44, 44);
+}
+
+.pos {
+  color: green;
 }

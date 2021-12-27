@@ -14,7 +14,7 @@ import { TransDialogComponent } from '../trans-dialog/trans-dialog.component';
 export class OverviewComponent implements OnInit {
 
   transactions?: Transaction[];
-  displayedColumns: string[] = ['account_name', 'trans_payee', 'trans_type', 'trans_amount', 'trans_date', 'trans_note'];
+  displayedColumns: string[] = ['account_name', 'trans_payee', 'trans_type', 'trans_amount', 'trans_date', 'trans_category', 'trans_note'];
 
   monthlyDataSource?: MatTableDataSource<Transaction>;
   allDataSource?: MatTableDataSource<Transaction>;

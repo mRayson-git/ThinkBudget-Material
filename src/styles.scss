@@ -165,11 +165,17 @@ $theme-light: mat.define-light-theme(
 
 }
 
-html, body { min-height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
-.max {
+html {
     height: 100%;
+}
+
+body {
+    margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;
+    height: 100%;
+}
+
+app-root{
+    height: 100%
 }
 
 .flex-container-h {

@@ -24,11 +24,15 @@
             </ng-container>
             <ng-container matColumnDef="trans_amount">
                 <mat-header-cell *matHeaderCellDef>Amount</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{abs(element.transAmount) | currency}}</mat-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="element.transAmount < 0 ? 'neg' : 'pos'">{{abs(element.transAmount) | currency}}</mat-cell>
             </ng-container>
             <ng-container matColumnDef="trans_date">
                 <mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by date">Date</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{element.transDate.toDate() | date}}</mat-cell>
+                <mat-cell *matCellDef="let element">{{element.transDate.toDate() | date | uppercase}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="trans_category">
+                <mat-header-cell *matHeaderCellDef>Category</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.transCategory}}</mat-cell>
             </ng-container>
             <ng-container matColumnDef="trans_note">
                 <mat-header-cell *matHeaderCellDef>Note</mat-header-cell>
@@ -73,7 +77,7 @@
             </ng-container>
             <ng-container matColumnDef="trans_amount">
                 <mat-header-cell *matHeaderCellDef>Amount</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{abs(element.transAmount) | currency}}</mat-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="element.transAmount < 0 ? 'neg' : 'pos'">{{abs(element.transAmount) | currency}}</mat-cell>
             </ng-container>
             <ng-container matColumnDef="trans_date">
                 <mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by date">Date</mat-header-cell>
