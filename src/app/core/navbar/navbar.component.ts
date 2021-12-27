@@ -17,9 +17,7 @@ export class NavbarComponent implements OnInit {
     public auth: Auth,
     public router: Router) { }
 
-  ngOnInit(): void { 
-    console.log(this.auth.currentUser);
-  }
+  ngOnInit(): void { }
 
   login() {
     const loginDialogRef = this.dialog.open(LoginDialogComponent, {

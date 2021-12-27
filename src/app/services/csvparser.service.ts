@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Auth, authInstance$, authState, getAuth, updateCurrentUser, User } from '@angular/fire/auth';
-import { addDoc, collection, collectionData, Firestore } from '@angular/fire/firestore';
+import { addDoc, collection, collectionData, deleteDoc, doc, DocumentReference, Firestore } from '@angular/fire/firestore';
+import { setDoc } from '@firebase/firestore';
 import { Observable } from 'rxjs';
 import { CSVParsingProfile } from '../models/csvparsing-profile';
 
@@ -17,8 +18,7 @@ export class CsvparserService {
       this.currUser = auth.currentUser;
   }
 
-  addParser(parser: CSVParsingProfile) {
-    console.log(this.auth.currentUser);
+  addParser(parser: CSVParsingProfile): Promise<DocumentReference> {
     const parsersRef = collection(this.firestore, `${this.currUser?.uid}/thinkbudget/parsers`);
     return addDoc(parsersRef, parser);
   }
@@ -26,5 +26,15 @@ export class CsvparserService {
   getParsers(): Observable<CSVParsingProfile[]> {
     const parsersRef = collection(this.firestore, `${this.currUser?.uid}/thinkbudget/parsers`);
     return collectionData(parsersRef, {idField: 'id' }) as Observable<CSVParsingProfile[]>;
+  }
+
+  updateParser(parser: CSVParsingProfile){
+    const parserDocRef = doc(this.firestore, `${this.currUser?.uid}/thinkbudget/parsers/${parser.id}`);
+    return setDoc(parserDocRef, parser);
+  }
+
+  deleteParser(parser: CSVParsingProfile): Promise<void> {
+    const parserDocRef = doc(this.firestore, `${this.currUser?.uid}/thinkbudget/parsers/${parser.id}`);
+    return deleteDoc(parserDocRef);
   }
 }

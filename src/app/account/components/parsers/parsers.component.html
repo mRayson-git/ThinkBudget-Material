@@ -1,6 +1,9 @@
 <div class="container">
     <h1>File Layouts</h1>
-    <div *ngIf="!parsers || parsers.length == 0; else showParsers">
+    <div *ngIf="!parsers">
+        <mat-spinner></mat-spinner>
+    </div>
+    <div *ngIf="parsers && parsers.length == 0; else showParsers">
         <p>You have not specified any csv file layouts for importing your transactions, please add them here.</p>
         <button mat-raised-button color="primary" (click)="addLayout()">Add layout
             <mat-icon>add</mat-icon>
@@ -13,10 +16,10 @@
                     <div class="flex-container-h">
                         <span>{{parser.profileName}}</span>
                         <span class="spacer"></span>
-                        <button mat-icon-button color="primary">
+                        <button mat-icon-button color="primary" (click)="updateParser(parser)">
                             <mat-icon>edit</mat-icon>
                         </button>
-                        <button mat-icon-button color="warn">
+                        <button mat-icon-button color="warn" (click)="deleteParser(parser)">
                             <mat-icon>delete</mat-icon>
                         </button>
                     </div> 

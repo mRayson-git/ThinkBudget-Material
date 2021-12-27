@@ -24,10 +24,23 @@ export class ParsersComponent implements OnInit {
     const layoutDialogRef = this.dialog.open(LayoutDialogComponent, {
       minWidth: '400px',
     });
-
     layoutDialogRef.afterClosed().subscribe(result => {
       console.log('Dialog closed');
     });
+  }
+
+  updateParser(newParser: CSVParsingProfile) {
+    const layoutDialogRef = this.dialog.open(LayoutDialogComponent, {
+      minWidth: '400px',
+      data: { parser: newParser },
+    });
+    layoutDialogRef.afterClosed().subscribe(result => {
+      console.log('Dialog closed');
+    });
+  }
+
+  deleteParser(parser: CSVParsingProfile) {
+    this.parserService.deleteParser(parser);
   }
 
 }

@@ -12,6 +12,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatCardModule} from '@angular/material/card';
 import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+
 
 
 @NgModule({
@@ -31,6 +33,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
     MatGridListModule,
     MatCardModule,
     MatSidenavModule,
+    MatProgressSpinnerModule,
   ]
 })
 export class MaterialModule { }

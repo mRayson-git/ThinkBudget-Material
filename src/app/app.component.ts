@@ -11,7 +11,7 @@ export class AppComponent {
   isDarkTheme: boolean = false;
 
   constructor(public auth: Auth) {
-    this.auth.setPersistence(inMemoryPersistence);
+    this.auth.setPersistence(browserSessionPersistence);
   }
 
   toggleTheme() {
