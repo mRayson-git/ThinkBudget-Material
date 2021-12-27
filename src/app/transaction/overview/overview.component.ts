@@ -16,11 +16,19 @@ export class OverviewComponent implements OnInit {
   transactions?: Transaction[];
   displayedColumns: string[] = ['account_name', 'trans_payee', 'trans_type', 'trans_amount', 'trans_date', 'trans_note'];
 
+  monthlyDataSource?: MatTableDataSource<Transaction>;
+  allDataSource?: MatTableDataSource<Transaction>;
+
+  currDate: Date = new Date();
+  searching: boolean = false;
+
   constructor(public transactionService: TransactionService,
     public dialog: MatDialog) { }
 
   ngOnInit(): void {
-    this.transactionService.getTransactions().subscribe(transactions => this.transactions = transactions);
+    this.transactionService.getMonthlyTransactions(new Date()).subscribe(transactions => {
+      this.monthlyDataSource = new MatTableDataSource(transactions);
+    });
   }
 
   abs(value: number): number {
@@ -34,6 +42,23 @@ export class OverviewComponent implements OnInit {
     });
     transactionDialogRef.afterClosed().subscribe(result => {
       console.log('Dialog closed');
+    });
+  }
+
+  addTransaction() {
+    const transactionDialogRef = this.dialog.open(TransDialogComponent, {
+      minWidth: '400px',
+    });
+    transactionDialogRef.afterClosed().subscribe(result => {
+      console.log('Dialog closed');
+    });
+  }
+
+  getAllTransactions(): void {
+    this.searching = true;
+    this.transactionService.getTransactions().subscribe(transactions => {
+      this.allDataSource = new MatTableDataSource(transactions);
+      this.searching = false;
     });
   }
 }

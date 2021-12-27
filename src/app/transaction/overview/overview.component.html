@@ -1,13 +1,15 @@
 <h1>Overview</h1>
-<div *ngIf="!transactions">
+<div *ngIf="!monthlyDataSource">
     <mat-spinner></mat-spinner>
 </div>
-<div *ngIf="transactions && transactions.length == 0; else showTransactions">
+<div *ngIf="monthlyDataSource && monthlyDataSource.data.length == 0; else showTransactions">
     There are no transactions to display.
 </div>
 <ng-template #showTransactions>
+    <!-- Monthly Transactions Section -->
+    <h3>{{currDate | date:'MMMM' }}'s Transactions</h3>
     <div class="table-container">
-        <mat-table matSort [dataSource]="transactions" *ngIf="transactions">
+        <mat-table matSort [dataSource]="monthlyDataSource" *ngIf="monthlyDataSource">
             <ng-container matColumnDef="account_name">
                 <mat-header-cell *matHeaderCellDef>Account</mat-header-cell>
                 <mat-cell *matCellDef="let element">{{element.bankAccountName | uppercase}}</mat-cell>
@@ -39,5 +41,55 @@
             <mat-row matRipple *matRowDef="let row; columns: displayedColumns;" (click)="editElement(row)"></mat-row>
         </mat-table>
     </div>
+
+    <!-- All Transactions Section -->
+    <div class="flex-container-h">
+        <h3>All Transactions</h3>
+        <button mat-icon-button color="primary" (click)="getAllTransactions()">
+            <mat-icon>refresh</mat-icon>
+        </button>
+    </div>
+    <!-- Has yet to load all transactions -->
+    <div *ngIf="!allDataSource" style="margin-top: 0;">
+        <p style="margin-top: 0;">Press the refresh button above to retrieve all transactions.</p>
+    </div>
+    <mat-spinner *ngIf="searching"></mat-spinner>
+    <button mat-raised-button (click)="addTransaction()" color="primary" style="margin-bottom: 10px;" *ngIf="allDataSource">ADD TRANSACTION
+        <mat-icon>add</mat-icon>
+    </button>
+    <div class="table-container-all">
+        <mat-table matSort [dataSource]="allDataSource" *ngIf="allDataSource">
+            <ng-container matColumnDef="account_name">
+                <mat-header-cell *matHeaderCellDef>Account</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.bankAccountName | uppercase}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="trans_payee">
+                <mat-header-cell *matHeaderCellDef>Payee</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.transPayee | uppercase}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="trans_type">
+                <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.transType | uppercase}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="trans_amount">
+                <mat-header-cell *matHeaderCellDef>Amount</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{abs(element.transAmount) | currency}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="trans_date">
+                <mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by date">Date</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.transDate.toDate() | date}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="trans_note">
+                <mat-header-cell *matHeaderCellDef>Note</mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    <mat-icon *ngIf="element.transNote; else noNote">sticky_note_2</mat-icon>
+                    <ng-template #noNote></ng-template>
+                </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row matRipple *matRowDef="let row; columns: displayedColumns;" (click)="editElement(row)"></mat-row>
+        </mat-table>
+    </div>
+    
 </ng-template>
 

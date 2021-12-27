@@ -19,6 +19,7 @@ import {MatRippleModule} from '@angular/material/core';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import {MatSortModule} from '@angular/material/sort';
+import {MatTabsModule} from '@angular/material/tabs';
 
 
 @NgModule({
@@ -45,6 +46,7 @@ import {MatSortModule} from '@angular/material/sort';
     MatDatepickerModule,
     MatNativeDateModule,
     MatSortModule,
+    MatTabsModule,
   ]
 })
 export class MaterialModule { }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Auth, User } from '@angular/fire/auth';
-import { addDoc, collection, collectionData, deleteDoc, doc, DocumentReference, Firestore, limit, orderBy, query, setDoc, where, writeBatch } from '@angular/fire/firestore';
+import { addDoc, collection, collectionData, deleteDoc, doc, DocumentReference, Firestore, limit, orderBy, query, setDoc, Timestamp, where, writeBatch } from '@angular/fire/firestore';
 import { Observable, take } from 'rxjs';
 import { Transaction } from '../models/transaction';
 
@@ -70,7 +70,18 @@ export class TransactionService {
   // read all transactions
   getTransactions(): Observable<Transaction[]> {
     const transactionCollectionRef = collection(this.firestore, `${this.currUser?.uid}/thinkbudget/transactions`);
-    let q = query(transactionCollectionRef, limit(20), orderBy('transDate', 'desc'));
+    let q = query(transactionCollectionRef, orderBy('transDate', 'desc'));
+    return collectionData(q, {idField: 'id' }) as Observable<Transaction[]>;
+  }
+
+  //get the transactions for a given month (int)
+  getMonthlyTransactions(date: Date): Observable<Transaction[]> {
+    console.log(`Getting transactions from ${date} to ${new Date(date.getFullYear(), date.getMonth() + 1)}`);
+    const transactionCollectionRef = collection(this.firestore, `${this.currUser?.uid}/thinkbudget/transactions`);
+    let q = query(transactionCollectionRef,
+      where('transDate', '>=', Timestamp.fromDate(new Date(date.getFullYear(), date.getMonth()))),
+      where('transDate', '<', Timestamp.fromDate(new Date(date.getFullYear(), date.getMonth() + 1))),
+      orderBy('transDate', 'desc'));
     return collectionData(q, {idField: 'id' }) as Observable<Transaction[]>;
   }
 }
