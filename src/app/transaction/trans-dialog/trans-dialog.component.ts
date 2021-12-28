@@ -2,7 +2,10 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { take } from 'rxjs';
+import { Budget } from 'src/app/models/budget';
 import { Transaction } from 'src/app/models/transaction';
+import { BudgetService } from 'src/app/services/budget.service';
 import { TransactionService } from 'src/app/services/transaction.service';
 
 @Component({
@@ -22,11 +25,16 @@ export class TransDialogComponent implements OnInit {
     transCategory: new FormControl(''),
   });
 
+  budget?: Budget | null;
+
   constructor(public transDialogRef: MatDialogRef<TransDialogComponent>,
     public transactionService: TransactionService,
+    public budgetService: BudgetService,
     @Inject(MAT_DIALOG_DATA) public data: {transaction: Transaction}) { }
 
   ngOnInit(): void {
+    // TODO: Get it to pull the budget for the month of the current transaction
+    this.budgetService.getMonthlyBudget(new Date()).pipe(take(1)).subscribe(budget => this.budget = budget[0] || null);
     // if data is present we are editing
     if (this.data) {
       console.log(this.data.transaction);
@@ -86,9 +94,10 @@ export class TransDialogComponent implements OnInit {
       transAmount: this.transForm.get('transAmount')?.value,
       transPayee: this.transForm.get('transPayee')?.value,
       transType: this.transForm.get('transType')?.value,
-      transCategory: this.transForm.get('transCategory')?.value || '',
+      transCategory: this.transForm.get('transCategory')?.value || null,
       transNote: this.transForm.get('transNote')?.value || '',
     }
+    console.log(transaction);
     return transaction;
   }
 

@@ -32,4 +32,5 @@ export class AppComponent {
     overlayContainerClasses.remove('dark-theme');
     if (this.isDarkTheme) this.overlayContainer.getContainerElement().classList.add('dark-theme');
   }
+
 }

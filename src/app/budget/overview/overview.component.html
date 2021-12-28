@@ -1,0 +1,35 @@
+<div *ngIf="budget && budget == null">
+    <div class="flex-contain-h">
+        <span style="margin-right: 10px;">You don't have a budget set for this month.</span>
+        <button mat-raised-button routerLink="./create" color="primary">Create 
+            <mat-icon>add_circle</mat-icon>
+        </button>
+    </div>
+</div>
+<div *ngIf="transactions && budget && budget != null">
+    <h1>{{currDate | date:'MMMM'}}'s Budget</h1>
+    <ul>
+        <li>Estimated Income: {{budget.income | currency}}</li>
+        <li>Actual Income to date: {{getTotalIncome() | currency}}</li>
+        <li>Totel Spent: {{getTotalSpent() | currency}}</li>
+        <ul>
+            <li>Internal: {{getTotalSaved() | currency}}</li>
+            <li>External: {{getTotalOutgoing() | currency}}</li>
+        </ul>
+        <li>Total Overflowing into next month: {{budget.overflow | currency}}</li>
+    </ul>
+    <mat-list>
+        <mat-divider style="margin-bottom: 20px;"></mat-divider>
+        <div *ngFor="let parent of budgetService.getParentCategories(budget)">
+            <h3 style="margin-bottom: 0;">{{parent}}</h3>
+            <mat-list-item *ngFor="let category of budgetService.getCategoriesForParent(parent, budget)" class="flex-container-v">
+                <span mat-line>{{category.name}}: ({{getTotalForCategory(category) | currency}}/{{category.amount | currency}})</span>
+                <span mat-line *ngIf="getTotalForCategory(category) > category.amount!"><mat-progress-bar mode="determinate" value="{{getTotalForCategory(category)/category.amount!*100}}" color="warn"></mat-progress-bar></span>
+                <span mat-line *ngIf="getTotalForCategory(category) <= category.amount!"><mat-progress-bar mode="determinate" value="{{getTotalForCategory(category)/category.amount!*100}}" color="primary"></mat-progress-bar></span>
+            </mat-list-item>
+            <mat-divider style="margin-bottom: 20px;"></mat-divider>
+        </div>
+        
+    </mat-list>
+</div>
+

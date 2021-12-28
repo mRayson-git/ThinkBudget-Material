@@ -17,9 +17,13 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatTableModule} from '@angular/material/table';
 import {MatRippleModule} from '@angular/material/core';
 import {MatDatepickerModule} from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import {MatNativeDateModule} from '@angular/material/core';
 import {MatSortModule} from '@angular/material/sort';
 import {MatTabsModule} from '@angular/material/tabs';
+import {MatDividerModule} from '@angular/material/divider';
+import {MatListModule} from '@angular/material/list';
+import {MatTreeModule} from '@angular/material/tree';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 
 @NgModule({
@@ -47,6 +51,10 @@ import {MatTabsModule} from '@angular/material/tabs';
     MatNativeDateModule,
     MatSortModule,
     MatTabsModule,
+    MatDividerModule,
+    MatListModule,
+    MatTreeModule,
+    MatProgressBarModule,
   ]
 })
 export class MaterialModule { }

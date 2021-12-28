@@ -1,4 +1,5 @@
 import { Timestamp } from "@angular/fire/firestore";
+import { Category } from "./category";
 
 export interface Transaction {
     id?: string,
@@ -9,5 +10,5 @@ export interface Transaction {
     transPayee: string,
     transType: string,
     transNote?: string,
-    transCategory?: string,
+    transCategory?: Category,
 }

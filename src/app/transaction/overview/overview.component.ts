@@ -14,7 +14,7 @@ import { TransDialogComponent } from '../trans-dialog/trans-dialog.component';
 export class OverviewComponent implements OnInit {
 
   transactions?: Transaction[];
-  displayedColumns: string[] = ['account_name', 'trans_payee', 'trans_type', 'trans_amount', 'trans_date', 'trans_category', 'trans_note'];
+  displayedColumns: string[] = ['account-name', 'trans-payee', 'trans-type', 'trans-amount-in', 'trans-amount-out','trans-date', 'trans-category', 'trans-note'];
 
   monthlyDataSource?: MatTableDataSource<Transaction>;
   allDataSource?: MatTableDataSource<Transaction>;
@@ -26,7 +26,8 @@ export class OverviewComponent implements OnInit {
     public dialog: MatDialog) { }
 
   ngOnInit(): void {
-    this.transactionService.getMonthlyTransactions(new Date()).subscribe(transactions => {
+    this.transactionService.getMonthlyTransactions(this.currDate).subscribe(transactions => {
+      console.log(transactions);
       this.monthlyDataSource = new MatTableDataSource(transactions);
     });
   }

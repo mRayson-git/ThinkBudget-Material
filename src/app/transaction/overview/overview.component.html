@@ -8,43 +8,51 @@
 <ng-template #showTransactions>
     <!-- Monthly Transactions Section -->
     <h3>{{currDate | date:'MMMM' }}'s Transactions</h3>
-    <div class="table-container">
-        <mat-table matSort [dataSource]="monthlyDataSource" *ngIf="monthlyDataSource">
-            <ng-container matColumnDef="account_name">
-                <mat-header-cell *matHeaderCellDef>Account</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{element.bankAccountName | uppercase}}</mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="trans_payee">
-                <mat-header-cell *matHeaderCellDef>Payee</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{element.transPayee | uppercase}}</mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="trans_type">
-                <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{element.transType | uppercase}}</mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="trans_amount">
-                <mat-header-cell *matHeaderCellDef>Amount</mat-header-cell>
-                <mat-cell *matCellDef="let element" [ngClass]="element.transAmount < 0 ? 'neg' : 'pos'">{{abs(element.transAmount) | currency}}</mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="trans_date">
-                <mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by date">Date</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{element.transDate.toDate() | date | uppercase}}</mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="trans_category">
-                <mat-header-cell *matHeaderCellDef>Category</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{element.transCategory}}</mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="trans_note">
-                <mat-header-cell *matHeaderCellDef>Note</mat-header-cell>
-                <mat-cell *matCellDef="let element">
-                    <mat-icon *ngIf="element.transNote; else noNote">sticky_note_2</mat-icon>
-                    <ng-template #noNote></ng-template>
-                </mat-cell>
-            </ng-container>
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row matRipple *matRowDef="let row; columns: displayedColumns;" (click)="editElement(row)"></mat-row>
-        </mat-table>
-    </div>
+    <mat-card>
+        <mat-card-content>
+            <div class="table-container">
+                <mat-table matSort [dataSource]="monthlyDataSource" *ngIf="monthlyDataSource">
+                    <ng-container matColumnDef="account-name">
+                        <mat-header-cell *matHeaderCellDef>Account</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.bankAccountName | uppercase}}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="trans-payee">
+                        <mat-header-cell *matHeaderCellDef>Payee</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.transPayee | uppercase}}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="trans-type">
+                        <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.transType | uppercase}}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="trans-amount-in">
+                        <mat-header-cell *matHeaderCellDef>Inflow</mat-header-cell>
+                        <mat-cell *matCellDef="let element"><span *ngIf="element.transAmount >= 0">{{element.transAmount | currency}}</span></mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="trans-amount-out">
+                        <mat-header-cell *matHeaderCellDef>Outflow</mat-header-cell>
+                        <mat-cell *matCellDef="let element"><span *ngIf="element.transAmount < 0">{{element.transAmount | currency}}</span></mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="trans-date">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by date">Date</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.transDate.toDate() | date | uppercase}}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="trans-category">
+                        <mat-header-cell *matHeaderCellDef>Category</mat-header-cell>
+                        <mat-cell *matCellDef="let element"><span *ngIf="element.transCategory">{{element.transCategory.name}}</span></mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="trans-note">
+                        <mat-header-cell *matHeaderCellDef>Note</mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <mat-icon *ngIf="element.transNote; else noNote">sticky_note_2</mat-icon>
+                            <ng-template #noNote></ng-template>
+                        </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row matRipple *matRowDef="let row; columns: displayedColumns;" (click)="editElement(row)"></mat-row>
+                </mat-table>
+            </div>
+        </mat-card-content>
+    </mat-card>
 
     <!-- All Transactions Section -->
     <div class="flex-container-h">
@@ -61,39 +69,50 @@
     <button mat-raised-button (click)="addTransaction()" color="primary" style="margin-bottom: 10px;" *ngIf="allDataSource">ADD TRANSACTION
         <mat-icon>add</mat-icon>
     </button>
-    <div class="table-container-all">
-        <mat-table matSort [dataSource]="allDataSource" *ngIf="allDataSource">
-            <ng-container matColumnDef="account_name">
-                <mat-header-cell *matHeaderCellDef>Account</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{element.bankAccountName | uppercase}}</mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="trans_payee">
-                <mat-header-cell *matHeaderCellDef>Payee</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{element.transPayee | uppercase}}</mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="trans_type">
-                <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{element.transType | uppercase}}</mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="trans_amount">
-                <mat-header-cell *matHeaderCellDef>Amount</mat-header-cell>
-                <mat-cell *matCellDef="let element" [ngClass]="element.transAmount < 0 ? 'neg' : 'pos'">{{abs(element.transAmount) | currency}}</mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="trans_date">
-                <mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by date">Date</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{element.transDate.toDate() | date}}</mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="trans_note">
-                <mat-header-cell *matHeaderCellDef>Note</mat-header-cell>
-                <mat-cell *matCellDef="let element">
-                    <mat-icon *ngIf="element.transNote; else noNote">sticky_note_2</mat-icon>
-                    <ng-template #noNote></ng-template>
-                </mat-cell>
-            </ng-container>
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row matRipple *matRowDef="let row; columns: displayedColumns;" (click)="editElement(row)"></mat-row>
-        </mat-table>
-    </div>
-    
+    <mat-card *ngIf="allDataSource">
+        <mat-card-content>
+            <div class="table-container-all">
+                <mat-table matSort [dataSource]="allDataSource" *ngIf="allDataSource">
+                    <ng-container matColumnDef="account-name">
+                        <mat-header-cell *matHeaderCellDef>Account</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.bankAccountName | uppercase}}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="trans-payee">
+                        <mat-header-cell *matHeaderCellDef>Payee</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.transPayee | uppercase}}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="trans-type">
+                        <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.transType | uppercase}}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="trans-amount-in">
+                        <mat-header-cell *matHeaderCellDef>Inflow</mat-header-cell>
+                        <mat-cell *matCellDef="let element"><span *ngIf="element.transAmount >= 0">{{element.transAmount | currency}}</span></mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="trans-amount-out">
+                        <mat-header-cell *matHeaderCellDef>Outflow</mat-header-cell>
+                        <mat-cell *matCellDef="let element"><span *ngIf="element.transAmount < 0">{{element.transAmount | currency}}</span></mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="trans-date">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by date">Date</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{element.transDate.toDate() | date | uppercase}}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="trans-category">
+                        <mat-header-cell *matHeaderCellDef>Category</mat-header-cell>
+                        <mat-cell *matCellDef="let element"><span *ngIf="element.category">{{element.category.name}}</span></mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="trans-note">
+                        <mat-header-cell *matHeaderCellDef>Note</mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <mat-icon *ngIf="element.transNote; else noNote">sticky_note_2</mat-icon>
+                            <ng-template #noNote></ng-template>
+                        </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row matRipple *matRowDef="let row; columns: displayedColumns;" (click)="editElement(row)"></mat-row>
+                </mat-table>
+            </div>
+        </mat-card-content>
+    </mat-card>
 </ng-template>
 

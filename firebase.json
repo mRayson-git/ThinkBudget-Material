@@ -1,1 +1,16 @@
-{}
+{
+  "hosting": {
+    "public": "dist/think-budget-material",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

@@ -23,10 +23,12 @@
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="fill" *ngIf="budget && budget != null">
         <mat-label>Category</mat-label>
         <mat-select formControlName="transCategory">
-            <mat-option>Choose a category</mat-option>
+            <mat-optgroup *ngFor="let parent of budgetService.getParentCategories(budget)" [label]="parent">
+                <mat-option *ngFor="let category of budgetService.getCategoriesForParent(parent, budget)" [value]="category">{{category.name}}</mat-option>
+            </mat-optgroup>
         </mat-select>
     </mat-form-field>
     <mat-form-field appearance="fill">

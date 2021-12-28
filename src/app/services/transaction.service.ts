@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Auth, User } from '@angular/fire/auth';
-import { addDoc, collection, collectionData, deleteDoc, doc, DocumentReference, Firestore, limit, orderBy, query, setDoc, Timestamp, where, writeBatch } from '@angular/fire/firestore';
+import { addDoc, collection, collectionData, deleteDoc, doc, DocumentReference, Firestore, limit, orderBy, query, setDoc, Timestamp, where } from '@angular/fire/firestore';
 import { Observable, take } from 'rxjs';
 import { Transaction } from '../models/transaction';
 
@@ -11,10 +11,9 @@ export class TransactionService {
 
   currUser: User | null;
 
-  constructor(private firestore: Firestore,
-    private auth: Auth) {
-      this.currUser = auth.currentUser;
-    }
+  constructor(private firestore: Firestore, private auth: Auth) {
+    this.currUser = auth.currentUser;
+  }
 
   // import transactions from file
   batchSave(transactions: Transaction[]) {
