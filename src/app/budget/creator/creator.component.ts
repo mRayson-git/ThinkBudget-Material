@@ -4,6 +4,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Budget } from 'src/app/models/budget';
 import { Category } from 'src/app/models/category';
 import { BudgetService } from 'src/app/services/budget.service';
+import { EChartsOption } from 'echarts';
 
 @Component({
   selector: 'app-creator',
@@ -11,7 +12,7 @@ import { BudgetService } from 'src/app/services/budget.service';
   styleUrls: ['./creator.component.scss']
 })
 export class CreatorComponent implements OnInit {
-  
+
 
   currDate: Date = new Date();
   budget?: Budget | null;
@@ -28,13 +29,21 @@ export class CreatorComponent implements OnInit {
     colour: new FormControl(''),
   });
 
+  // Chart options information
+  chartOption?: EChartsOption;
+
+  chartData?: { value: number, name: string }[];
+
   constructor(public budgetService: BudgetService) { }
 
   ngOnInit(): void {
     // get current budget
     this.budgetService.getMonthlyBudget(this.currDate).subscribe(budget => {
       this.budget = budget[0] || null;
-      if (this.budget != null) this.budgetAlterationForm.get('income')?.setValue(this.budget.income);
+      if (this.budget != null) {
+        this.budgetAlterationForm.get('income')?.setValue(this.budget.income);
+        this.buildChart();
+      }
     });
     // get last months budget to account for overflow
     this.budgetService.getMonthlyBudget(this.getLastMonth()).subscribe(budget => {
@@ -49,8 +58,8 @@ export class CreatorComponent implements OnInit {
       categories: []
     }
     this.budgetService.createBudget(budget)
-    .then(result => console.log(result))
-    .catch(err => console.log(err));
+      .then(result => console.log(result))
+      .catch(err => console.log(err));
   }
 
   updateBudget(): void {
@@ -91,6 +100,48 @@ export class CreatorComponent implements OnInit {
 
     return lastMonth;
   }
-  
+
+  buildChart(): void {
+    let chartData: { value: number, name: string}[] = [];
+    let chartColours: string[] = [];
+    this.budget?.categories.forEach(category => {
+      chartData?.push({
+        name: category.name,
+        value: category.amount!
+      });
+      chartColours.push(category.colour!);
+    });
+    chartData.push({
+      value: this.budgetService.getRemaining(this.budget!),
+      name: 'Remaining'
+    });
+    chartColours.push('#9fa39f');
+    this.chartOption = {
+      tooltip: {
+        trigger: 'item'
+      },
+      series: [
+        {
+          name: 'Budget',
+          type: 'pie',
+          radius: ['40%', '70%'],
+          avoidLabelOverlap: false,
+          itemStyle: {
+            borderRadius: 10,
+            borderColor: '#fff',
+            borderWidth: 2
+          },
+          label: {
+            show: false
+          },
+          labelLine: {
+            show: false
+          },
+          data: chartData
+        }
+      ],
+      color: chartColours
+    };
+  }
 
 }

@@ -1,7 +1,79 @@
 <!-- TODO: Proper wrapping when on mobile view -->
-<mat-toolbar color="primary">
-    <button mat-button routerLink="/home" style="font-size: larger;">ThinkBudget</button>
-    <div *ngIf="auth.currentUser">
+<mat-toolbar color="primary" fxLayout="row">
+    <span fxFlex>thinkbudget</span>
+    <!-- if logged in -->
+    <div *ngIf="auth.currentUser && auth.currentUser != null">
+        <!-- Account -->
+        <button mat-button fxHide.xs routerLink="/account">
+            <mat-icon>help</mat-icon>
+            Account
+        </button>
+        <!-- Budget -->
+        <button mat-button fxHide.xs [matMenuTriggerFor]="budgetMenu">
+            <mat-icon>attach_money</mat-icon>
+            Budget
+        </button>
+        <mat-menu #budgetMenu>
+            <a mat-menu-item fxHide.xs routerLink="/budget">Overview</a>
+            <mat-divider></mat-divider>
+            <a mat-menu-item fxHide.xs routerLink="/budget/create">Create</a>
+        </mat-menu>
+        <!-- Transactions -->
+        <button mat-button fxHide.xs routerLink="/transaction">
+            <mat-icon>attach_money</mat-icon>
+            Transactions
+        </button>
+        <!-- Logout -->
+        <button mat-button fxHide.xs (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            Logout
+        </button>
+        <!-- Dropdown -->
+        <button mat-icon-button [matMenuTriggerFor]="dropMenu" fxHide fxShow.xs>
+            <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #dropMenu>
+            <!-- Account -->
+            <button mat-menu-item fxShow.xs routerLink="/account">
+                <mat-icon>help</mat-icon>
+                Account
+            </button>
+            <mat-divider></mat-divider>
+            <!-- Budget -->
+            <button mat-menu-item fxShow.xs [matMenuTriggerFor]="budgetSubMenu">
+                <mat-icon>attach_money</mat-icon>
+                Budget
+            </button>
+            <mat-menu #budgetSubMenu>
+                <a mat-menu-item fxShow.xs routerLink="/budget">Overview</a>
+                <mat-divider></mat-divider>
+                <a mat-menu-item fxShow.xs routerLink="/budget/create">Create</a>
+            </mat-menu>
+            <mat-divider></mat-divider>
+            <!-- Transactions -->
+            <button mat-menu-item fxShow.xs routerLink="/transaction">
+                <mat-icon>attach_money</mat-icon>
+                Transactions
+            </button>
+            <mat-divider></mat-divider>
+            <!-- Logout -->
+            <button mat-menu-item fxShow.xs (click)="logout()">
+                <mat-icon>logout</mat-icon>
+                Logout
+            </button>
+        </mat-menu>
+    </div>
+    <div *ngIf="!auth.currentUser">
+        <button mat-button (click)="login()">
+            <mat-icon>login</mat-icon>
+            Login
+        </button>
+    </div>
+    
+</mat-toolbar>
+
+
+    <!-- <div *ngIf="auth.currentUser">
         <button mat-button [matMenuTriggerFor]="accountMenu">Account</button>
         <mat-menu #accountMenu>
             <a mat-menu-item routerLink="/account">Information</a>
@@ -33,7 +105,4 @@
     </button>
     <mat-menu #menu="matMenu">
         <button mat-menu-item (click)="toggleTheme.emit()">Toggle Theme</button>
-    </mat-menu>
-</mat-toolbar>
-
-
+    </mat-menu> -->

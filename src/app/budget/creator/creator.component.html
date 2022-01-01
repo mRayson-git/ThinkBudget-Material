@@ -37,7 +37,7 @@
                 <mat-divider style="margin-top: 10px; margin-bottom: 30px;"></mat-divider>
                 <mat-form-field appearance="fill">
                     <mat-label>Category</mat-label>
-                    <mat-select formControlName="category" required>
+                    <mat-select formControlName="category">
                         <mat-optgroup *ngFor="let parent of budgetService.parentCategories" [label]="parent">
                             <mat-option *ngFor="let category of budgetService.getCategoryNames(parent)" [value]="category">{{category.name}}</mat-option>
                         </mat-optgroup>
@@ -58,6 +58,10 @@
                     <mat-icon>delete</mat-icon>
                 </button>
             </form>
+            <div *ngIf="chartOption">
+                <h1 style="text-align: center;">Current Budget (Visual)</h1>
+                <div echarts [options]="chartOption" class="chart"></div>
+            </div>
         </div>
         <div style="grid-column: 2; padding-left: 20px;">
             <h3>Current Budget (WIP)</h3>
@@ -70,3 +74,5 @@
         </div>
     </div>
 </div>
+
+

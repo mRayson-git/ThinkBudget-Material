@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { EChartsOption } from 'echarts';
 import { take } from 'rxjs';
 import { Budget } from 'src/app/models/budget';
 import { Category } from 'src/app/models/category';
@@ -17,6 +18,8 @@ export class OverviewComponent implements OnInit {
   budget?: Budget | null;
   transactions?: Transaction[] | null;
 
+  chartOption?: EChartsOption;
+
   constructor(public budgetService: BudgetService,
     public transactionService: TransactionService) { }
 
@@ -31,7 +34,6 @@ export class OverviewComponent implements OnInit {
         });
       };
     });
-    
   }
 
   // get total saved
@@ -83,5 +85,11 @@ export class OverviewComponent implements OnInit {
     this.budget!.overflow = this.getTotalIncome() - this.getTotalSpent();
     console.log(`Overflow calculated at: ${this.getTotalIncome() - this.getTotalSpent()}`);
     this.budgetService.updateBudget(this.budget!);
+  }
+
+  buildChart(): void {
+    this.chartOption = {
+      
+    }
   }
 }

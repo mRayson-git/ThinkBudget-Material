@@ -18,6 +18,9 @@
         </ul>
         <li>Total Overflowing into next month: {{budget.overflow | currency}}</li>
     </ul>
+    <div *ngIf="chartOption">
+        <div echarts [options]="chartOption" class="chart"></div>
+    </div>
     <mat-list>
         <mat-divider style="margin-bottom: 20px;"></mat-divider>
         <div *ngFor="let parent of budgetService.getParentCategories(budget)">
