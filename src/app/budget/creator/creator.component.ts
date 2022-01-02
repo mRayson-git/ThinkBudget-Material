@@ -42,13 +42,14 @@ export class CreatorComponent implements OnInit {
       this.budget = budget[0] || null;
       if (this.budget != null) {
         this.budgetAlterationForm.get('income')?.setValue(this.budget.income);
-        this.buildChart();
       }
+      // get last months budget to account for overflow
+      this.budgetService.getMonthlyBudget(this.getLastMonth()).subscribe(budget => {
+        this.pastBudget = budget[0] || null;
+        this.buildChart();
+      });
     });
-    // get last months budget to account for overflow
-    this.budgetService.getMonthlyBudget(this.getLastMonth()).subscribe(budget => {
-      this.pastBudget = budget[0] || null;
-    });
+    
   }
 
   createBudget(): void {
@@ -77,6 +78,18 @@ export class CreatorComponent implements OnInit {
     this.budgetAlterationForm.reset();
   }
 
+  importPastBudget(): void {
+    let newBudget: Budget = {
+      income: this.pastBudget?.income!,
+      date: Timestamp.fromDate(new Date()),
+      categories: this.pastBudget?.categories!,
+    }
+    
+    this.budgetService.createBudget(newBudget)
+      .then(result => console.log(result))
+      .catch(err => console.log(err));;
+  }
+
   removeCategory(category: Category): void {
     this.budget!.categories = this.budget?.categories?.filter(budgetCategory => !(budgetCategory.parent == category.parent && budgetCategory.name == category.name)) || [];
     this.budgetService.updateBudget(this.budget!);
@@ -95,9 +108,8 @@ export class CreatorComponent implements OnInit {
     lastMonth = new Date(this.currDate.getFullYear(), this.currDate.getMonth() - 1);
     // on year change
     if (this.currDate.getMonth() == 0) {
-      lastMonth = new Date(this.currDate.getFullYear() - 1, 12);
+      lastMonth = new Date(this.currDate.getFullYear() - 1, 11);
     }
-
     return lastMonth;
   }
 
@@ -109,13 +121,11 @@ export class CreatorComponent implements OnInit {
         name: category.name,
         value: category.amount!
       });
-      chartColours.push(category.colour!);
     });
     chartData.push({
-      value: this.budgetService.getRemaining(this.budget!),
+      value: this.budgetService.getRemaining(this.budget!, this.pastBudget?.overflow),
       name: 'Remaining'
     });
-    chartColours.push('#9fa39f');
     this.chartOption = {
       tooltip: {
         trigger: 'item'
@@ -140,8 +150,42 @@ export class CreatorComponent implements OnInit {
           data: chartData
         }
       ],
-      color: chartColours
+      color: [
+        "#e6ffee",
+        "#ccffdd",
+        "#b3ffcc",
+        "#99ffbb",
+        "#80ffaa",
+        "#66ff99",
+        "#4dff88",
+        "#33ff77",
+        "#1aff66",
+        "#00ff55",
+        "#00e64d",
+        "#00cc44",
+        "#00b33c",
+        "#009933",
+        "#00802b",
+        "#006622",
+        "#004d1a",
+        "#ccffcc",
+        "#b3ffb3",
+        "#99ff99",
+        "#80ff80",
+        "#66ff66",
+        "#4dff4d",
+        "#33ff33",
+        "#1aff1a",
+        "#00ff00",
+        "#00e600",
+        "#00cc00",
+        "#00b300",
+        "#009900",
+        "#008000",
+      ]
     };
   }
+  
+  
 
 }

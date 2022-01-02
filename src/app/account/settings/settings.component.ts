@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Auth, authState, User } from '@angular/fire/auth';
 import { FormGroup, FormControl } from '@angular/forms';
 import { EMPTY, Observable } from 'rxjs';
@@ -9,6 +9,8 @@ import { EMPTY, Observable } from 'rxjs';
   styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit {
+
+  // @Output() toggleTheme = new EventEmitter<void>();
 
   public userState: Observable<User | null> = EMPTY;
   currUser?: User | null;

@@ -4,6 +4,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { take } from 'rxjs';
 import { Budget } from 'src/app/models/budget';
+import { Category } from 'src/app/models/category';
 import { Transaction } from 'src/app/models/transaction';
 import { BudgetService } from 'src/app/services/budget.service';
 import { TransactionService } from 'src/app/services/transaction.service';
@@ -26,6 +27,8 @@ export class TransDialogComponent implements OnInit {
   });
 
   budget?: Budget | null;
+
+  ignored: Category = { parent: "Misc", name: "Ignored" };
 
   constructor(public transDialogRef: MatDialogRef<TransDialogComponent>,
     public transactionService: TransactionService,

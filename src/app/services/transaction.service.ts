@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Auth, User } from '@angular/fire/auth';
-import { addDoc, collection, collectionData, deleteDoc, doc, DocumentReference, Firestore, limit, orderBy, query, setDoc, Timestamp, where } from '@angular/fire/firestore';
+import { addDoc, collection, collectionData, deleteDoc, doc, DocumentReference, Firestore, limit, orderBy, Query, query, setDoc, Timestamp, where } from '@angular/fire/firestore';
 import { Observable, take } from 'rxjs';
+import { Category } from '../models/category';
 import { Transaction } from '../models/transaction';
 
 @Injectable({
@@ -69,18 +70,79 @@ export class TransactionService {
   // read all transactions
   getTransactions(): Observable<Transaction[]> {
     const transactionCollectionRef = collection(this.firestore, `${this.currUser?.uid}/thinkbudget/transactions`);
-    let q = query(transactionCollectionRef, orderBy('transDate', 'desc'));
+    let q: Query;
+    // // Check if there exists historical data for transactions
+    // if (localStorage.getItem('HISTORICAL_DATA')) {
+    //   let historicalTransactions: Transaction[] = JSON.parse(localStorage.getItem('HISTORICAL_DATA')!).transactions;
+    //   // Get the most recent transaction from historical data
+    //   let mostRecent = historicalTransactions.pop();
+    //   // Get transactions from firebase with a data value greater than or equal to this transaction
+    //   q = query(transactionCollectionRef, where('transDate', ">=", mostRecent!.transDate))
+    //   collectionData(q, {idField: 'id'}).subscribe(transactions => {
+    //     transactions.forEach(transaction => {
+    //       if (transaction.trans)
+    //     });
+    //   });
+    // }
+    
+    q = query(transactionCollectionRef, orderBy('transDate', 'desc'));
     return collectionData(q, {idField: 'id' }) as Observable<Transaction[]>;
   }
 
   //get the transactions for a given month (int)
   getMonthlyTransactions(date: Date): Observable<Transaction[]> {
-    console.log(`Getting transactions from ${date} to ${new Date(date.getFullYear(), date.getMonth() + 1)}`);
+    // console.log(`Getting transactions from ${date} to ${new Date(date.getFullYear(), date.getMonth() + 1)}`);
     const transactionCollectionRef = collection(this.firestore, `${this.currUser?.uid}/thinkbudget/transactions`);
     let q = query(transactionCollectionRef,
       where('transDate', '>=', Timestamp.fromDate(new Date(date.getFullYear(), date.getMonth()))),
       where('transDate', '<', Timestamp.fromDate(new Date(date.getFullYear(), date.getMonth() + 1))),
       orderBy('transDate', 'desc'));
     return collectionData(q, {idField: 'id' }) as Observable<Transaction[]>;
+  }
+
+
+  // Stat calculating methods 
+  // get total spent
+  getTotalSpent(transactions: Transaction[]): number {
+    let total = 0;
+    transactions.forEach(transaction => {
+      // if (transaction.transCategory?.name == "Ignored") console.log(transaction);
+      if (transaction.transCategory?.parent != "Income" && transaction.transCategory?.name != "Ignored") {
+        total = total - transaction.transAmount;
+      }
+    });
+    return total;
+  }
+
+  getTotalSpentForCategory(transactions: Transaction[], category: Category): number {
+    let total = 0;
+    transactions.forEach(transaction => {
+      if (transaction.transCategory?.parent == category.parent && transaction.transCategory.name == category.name) total = total + transaction.transAmount;
+    })
+    return total;
+  }
+
+  // get total saved
+  getTotalSaved(transactions: Transaction[]): number {
+    let total = 0;
+    transactions.forEach(transaction => {
+      // minus since the money is leaving for a savings account
+      if (transaction.transCategory?.parent == "Saving") total = total - transaction.transAmount;
+    });
+    return total;
+  }
+
+  // get total outgoing
+  getTotalOutgoing(transactions: Transaction[]): number {
+    return this.getTotalSpent(transactions) - this.getTotalSaved(transactions);
+  }
+
+  // get total income
+  getTotalIncome(transactions: Transaction[]): number {
+    let total = 0;
+    transactions.forEach(transaction => {
+      if (transaction.transCategory?.parent == "Income") total = total + transaction.transAmount;
+    });
+    return total;
   }
 }

@@ -4,10 +4,15 @@
     <!-- if logged in -->
     <div *ngIf="auth.currentUser && auth.currentUser != null">
         <!-- Account -->
-        <button mat-button fxHide.xs routerLink="/account">
-            <mat-icon>help</mat-icon>
+        <button mat-button fxHide.xs [matMenuTriggerFor]="accountMenu">
+            <mat-icon>account_circle</mat-icon>
             Account
         </button>
+        <mat-menu #accountMenu>
+            <a mat-menu-item fxHide.xs routerLink="/account">Account</a>
+            <button mat-menu-item (click)="toggleTheme.emit()">Toggle Theme</button>
+        </mat-menu>
+        
         <!-- Budget -->
         <button mat-button fxHide.xs [matMenuTriggerFor]="budgetMenu">
             <mat-icon>attach_money</mat-icon>
@@ -16,7 +21,7 @@
         <mat-menu #budgetMenu>
             <a mat-menu-item fxHide.xs routerLink="/budget">Overview</a>
             <mat-divider></mat-divider>
-            <a mat-menu-item fxHide.xs routerLink="/budget/create">Create</a>
+            <a mat-menu-item fxHide.xs routerLink="/budget/create">Create/Edit</a>
         </mat-menu>
         <!-- Transactions -->
         <button mat-button fxHide.xs routerLink="/transaction">
@@ -34,10 +39,15 @@
         </button>
         <mat-menu #dropMenu>
             <!-- Account -->
-            <button mat-menu-item fxShow.xs routerLink="/account">
-                <mat-icon>help</mat-icon>
+            <button mat-menu-item fxShow.xs [matMenuTriggerFor]="accountSubMenu">
+                <mat-icon>account_circle</mat-icon>
                 Account
             </button>
+            <mat-menu #accountSubMenu>
+                <a mat-menu-item fxShow.xs routerLink="/account">Account</a>
+                <button mat-menu-item fxShow.xs (click)="toggleTheme.emit()">Toggle Theme</button>
+            </mat-menu>
+            
             <mat-divider></mat-divider>
             <!-- Budget -->
             <button mat-menu-item fxShow.xs [matMenuTriggerFor]="budgetSubMenu">
@@ -47,7 +57,7 @@
             <mat-menu #budgetSubMenu>
                 <a mat-menu-item fxShow.xs routerLink="/budget">Overview</a>
                 <mat-divider></mat-divider>
-                <a mat-menu-item fxShow.xs routerLink="/budget/create">Create</a>
+                <a mat-menu-item fxShow.xs routerLink="/budget/create">Create/Edit</a>
             </mat-menu>
             <mat-divider></mat-divider>
             <!-- Transactions -->

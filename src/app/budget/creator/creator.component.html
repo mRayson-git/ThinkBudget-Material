@@ -1,5 +1,5 @@
 <!-- Create a new budget -->
-<div *ngIf="budget && budget == null">
+<div *ngIf="budget == null">
     <h1>Budget Creation for {{currDate | date:'MMMM'}}</h1>
     <!-- budget creation form -->
     <form [formGroup]="budgetIncomeForm" class="flex-container-v" (ngSubmit)="createBudget()">
@@ -11,6 +11,26 @@
             <mat-icon>create</mat-icon>
         </button>
     </form>
+
+    <div *ngIf="pastBudget != null">
+        <h2>Import past month's budget</h2>
+        <mat-card>
+            <mat-card-content >
+                <ul *ngFor="let parent of budgetService.getParentCategories(pastBudget)">
+                    <li>{{parent}}</li>
+                    <ul *ngFor="let category of budgetService.getCategoriesForParent(parent, pastBudget)">
+                        <li class="flex-container-h"><span>{{category.name}}</span><span class="spacer"></span><span>{{category.amount | currency}}</span></li>
+                    </ul>
+                </ul>
+            </mat-card-content>
+            <mat-card-actions fxLayout="row">
+                <button mat-raised-button color="primary" fxFill (click)="importPastBudget()">
+                    <mat-icon>add</mat-icon>
+                    IMPORT
+                </button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
 </div>
 
 <!-- Edit existing budget -->
@@ -18,9 +38,10 @@
     <h1>Budget Modification for {{currDate | date:'MMMM'}}</h1>
     <div class="budget-building-stats flex-container-v">
         <span>Current Estimated Income: {{budget?.income | currency}}</span>
-        <span *ngIf="pastBudget?.overflow">Current overflow from past month: {{pastBudget?.overflow}}</span>
+        <span *ngIf="pastBudget && pastBudget?.overflow">Current overflow from past month: {{pastBudget?.overflow | currency}}</span>
         <span>Current Budgeted Total: {{budgetService.getTotalBudgeted(budget) | currency}}</span>
-        <span>Remaining: {{budgetService.getRemaining(budget) | currency}}</span>
+        <span *ngIf="pastBudget && pastBudget.overflow">Remaining: {{budgetService.getRemaining(budget, pastBudget.overflow) | currency}}</span>
+        <span *ngIf="!pastBudget || !pastBudget.overflow">Remaining: {{budgetService.getRemaining(budget) | currency}}</span>
     </div>
     <mat-divider style="margin-top: 10px; margin-bottom: 10px;"></mat-divider>
     <div class="grid-container">
@@ -47,10 +68,10 @@
                     <mat-label>Amount</mat-label>
                     <input matInput type="number" formControlName="amount">
                 </mat-form-field>
-                <mat-form-field appearance="fill">
+                <!-- <mat-form-field appearance="fill">
                     <mat-label>Colour</mat-label>
                     <input matInput type="color" formControlName="colour">
-                </mat-form-field>
+                </mat-form-field> -->
                 <button mat-raised-button color="primary" type="submit">ADD TO BUDGET
                     <mat-icon>add</mat-icon>
                 </button>
@@ -66,7 +87,7 @@
         <div style="grid-column: 2; padding-left: 20px;">
             <h3>Current Budget (WIP)</h3>
             <ul *ngFor="let parent of budgetService.getParentCategories(budget)">
-                <li>{{parent}}</li>
+                <li class="flex-container-h">{{parent}}</li>
                 <ul *ngFor="let category of budgetService.getCategoriesForParent(parent, budget)">
                     <li class="flex-container-h"><span>{{category.name}}</span><span class="spacer"></span><span>{{category.amount | currency}}</span></li>
                 </ul>

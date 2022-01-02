@@ -1,3 +1,4 @@
+import { ValueConverter } from '@angular/compiler/src/render3/view/template';
 import { Component, OnInit } from '@angular/core';
 import { EChartsOption } from 'echarts';
 import { take } from 'rxjs';
@@ -16,6 +17,7 @@ export class OverviewComponent implements OnInit {
 
   currDate: Date = new Date();
   budget?: Budget | null;
+  pastBudget?: Budget | null;
   transactions?: Transaction[] | null;
 
   chartOption?: EChartsOption;
@@ -26,49 +28,19 @@ export class OverviewComponent implements OnInit {
   ngOnInit(): void {
     this.budgetService.getMonthlyBudget(this.currDate).pipe(take(1)).subscribe(budget => {
       this.budget = budget[0] || null;
-      if (budget != null) {
+      if (this.budget != null) {
         this.transactionService.getMonthlyTransactions(this.currDate)
           .pipe(take(1)).subscribe(transactions => {
             this.transactions = transactions;
-            this.calculateOverflow();
+            this.budgetService.calculateOverflow(this.budget!, this.transactions);
+            this.buildChart();
         });
-      };
+      }
+    });
+    this.budgetService.getMonthlyBudget(this.getLastMonth()).subscribe(budget => {
+      this.pastBudget = budget[0] || null;
     });
   }
-
-  // get total saved
-  getTotalSaved(): number {
-    let total = 0;
-    this.transactions!.forEach(transaction => {
-      // minus since the money is leaving for a savings account
-      if (transaction.transCategory?.parent == "Saving") total = total - transaction.transAmount;
-    });
-    return total;
-  }
-
-  // get total spent
-  getTotalSpent(): number {
-    let total = 0;
-    this.transactions?.forEach(transaction => {
-      if (transaction.transCategory?.parent != "Income") total = total - transaction.transAmount;
-    });
-    return total;
-  }
-
-  // get total outgoing
-  getTotalOutgoing(): number {
-    return this.getTotalSpent() - this.getTotalSaved();
-  }
-
-  // get total income
-  getTotalIncome(): number {
-    let total = 0;
-    this.transactions?.forEach(transaction => {
-      if (transaction.transCategory?.parent == "Income") total = total + transaction.transAmount;
-    });
-    return total;
-  }
-
   // get totals per category
   getTotalForCategory(category: Category): number {
     let total = 0;
@@ -80,16 +52,63 @@ export class OverviewComponent implements OnInit {
     });
     return total;
   }
+  // Update past month overflow
+  updatePastMonthOverflow(): void {
+    // 1: get past month budget
+    let pastTransactions: Transaction[];
+    this.transactionService.getMonthlyTransactions(this.getLastMonth()).subscribe(transactions => {
+      pastTransactions = transactions;
+      this.budgetService.calculateOverflow(this.pastBudget!, pastTransactions);
+    });
+  }
 
-  calculateOverflow(): void {
-    this.budget!.overflow = this.getTotalIncome() - this.getTotalSpent();
-    console.log(`Overflow calculated at: ${this.getTotalIncome() - this.getTotalSpent()}`);
-    this.budgetService.updateBudget(this.budget!);
+  getLastMonth(): Date {
+    let lastMonth: Date;
+    // general situation
+    lastMonth = new Date(this.currDate.getFullYear(), this.currDate.getMonth() - 1);
+    // on year change
+    if (this.currDate.getMonth() == 0) {
+      lastMonth = new Date(this.currDate.getFullYear() - 1, 11);
+    }
+    return lastMonth;
   }
 
   buildChart(): void {
+    let chartDataset = [
+      ['Category', 'Remaining']
+    ];
+    let chartCategories: string[] = [];
+    let chartData: number[] = [];
+    this.budgetService.getParentCategories(this.budget!).forEach(parent => {
+      this.budgetService.getCategoriesForParent(parent, this.budget!).forEach(category => {
+        chartDataset.push([category.name, (category.amount! - Math.abs(this.transactionService.getTotalSpentForCategory(this.transactions!, category))).toString()])
+      });
+    });
     this.chartOption = {
-      
+      tooltip: {},
+      dataset: {
+        source: chartDataset
+      },
+      xAxis: { 
+        type: 'category',
+        axisLabel: {
+          align: 'center'
+        },
+        show: false
+      },
+      yAxis: { },
+      series: [{
+        type: 'bar',
+        label: {
+          show: true,
+          position: 'bottom',
+          formatter: '{b}',
+          color: 'white'
+        },
+      }],
+      color: [
+        "#66ff99",
+      ]
     }
   }
 }

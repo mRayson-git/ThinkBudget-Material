@@ -1,4 +1,4 @@
-<div *ngIf="budget && budget == null">
+<div *ngIf="budget == null">
     <div class="flex-contain-h">
         <span style="margin-right: 10px;">You don't have a budget set for this month.</span>
         <button mat-raised-button routerLink="./create" color="primary">Create 
@@ -6,15 +6,20 @@
         </button>
     </div>
 </div>
-<div *ngIf="transactions && budget && budget != null">
+<div *ngIf="budget && budget != null && transactions">
     <h1>{{currDate | date:'MMMM'}}'s Budget</h1>
+    <button mat-raised-button *ngIf="pastBudget && pastBudget.overflow" (click)="updatePastMonthOverflow()">
+        <mat-icon>update</mat-icon>
+        UPDATE PAST MONTH'S OVERFLOW
+    </button>
     <ul>
         <li>Estimated Income: {{budget.income | currency}}</li>
-        <li>Actual Income to date: {{getTotalIncome() | currency}}</li>
-        <li>Totel Spent: {{getTotalSpent() | currency}}</li>
+        <li>Actual Income to date: {{transactionService.getTotalIncome(transactions) | currency}}</li>
+        <li *ngIf="pastBudget && pastBudget.overflow">Overflow from past month: {{this.pastBudget.overflow | currency}}</li>
+        <li>Totel Spent: {{transactionService.getTotalSpent(transactions) | currency}}</li>
         <ul>
-            <li>Internal: {{getTotalSaved() | currency}}</li>
-            <li>External: {{getTotalOutgoing() | currency}}</li>
+            <li>Internal: {{transactionService.getTotalSaved(transactions) | currency}}</li>
+            <li>External: {{transactionService.getTotalOutgoing(transactions) | currency}}</li>
         </ul>
         <li>Total Overflowing into next month: {{budget.overflow | currency}}</li>
     </ul>
@@ -32,7 +37,6 @@
             </mat-list-item>
             <mat-divider style="margin-bottom: 20px;"></mat-divider>
         </div>
-        
     </mat-list>
 </div>
 

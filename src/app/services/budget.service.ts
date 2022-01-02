@@ -4,6 +4,8 @@ import { addDoc, collection, collectionData, CollectionReference, deleteDoc, doc
 import { Observable } from 'rxjs';
 import { Budget } from '../models/budget';
 import { Category } from '../models/category';
+import { Transaction } from '../models/transaction';
+import { TransactionService } from './transaction.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +25,7 @@ export class BudgetService {
     "Saving",
     "Transportation",
     "Utilities",
+    "Misc",
   ]
   // default child categories
   childCategories: Category[] = [
@@ -73,9 +76,12 @@ export class BudgetService {
     { parent: 'Utilities', name: 'Gas' },
     { parent: 'Utilities', name: 'Phone' },
     { parent: 'Utilities', name: 'Water' },
+
+    // Misc
+    { parent: 'Misc', name: 'Ignored' },
   ]
   
-  constructor(private firestore: Firestore, private  auth: Auth) {
+  constructor(private firestore: Firestore, private  auth: Auth, private transactionService: TransactionService) {
     this.currUser = auth.currentUser;
     this.budgetCollectionRef = collection(firestore, `${this.currUser?.uid}/thinkbudget/budgets`);
   }
@@ -99,7 +105,6 @@ export class BudgetService {
 
   // update
   updateBudget(budget: Budget): Promise<void> {
-    console.log(this.currUser);
     let budgetDocRef = doc(this.firestore, `${this.currUser?.uid}/thinkbudget/budgets/${budget.id}`);
     return setDoc(budgetDocRef, budget);
   }
@@ -129,14 +134,31 @@ export class BudgetService {
       else return 0;}) || [];
   }
 
+  getIncomeCategories(): Category[] {
+    return this.childCategories.filter(category => category.parent == "Income")
+    .sort((a,b) => {
+      if (a.name > b.name) return 1;
+      else if (a.name < b.name) return -1;
+      else return 0;}) || [];
+  }
+
   getTotalBudgeted(budget: Budget): number {
     let total = 0;
     budget.categories.forEach(category => total = total + category.amount!);
     return total;
   }
 
-  getRemaining(budget: Budget): number {
+  getRemaining(budget: Budget, overflow?: number): number {
+    if (overflow) {
+      return budget.income! - this.getTotalBudgeted(budget) + overflow;
+    }
     return budget.income! - this.getTotalBudgeted(budget);
+  }
+
+  calculateOverflow(budget: Budget, transactions: Transaction[]): void {
+    budget.overflow = this.transactionService.getTotalIncome(transactions) - this.transactionService.getTotalSpent(transactions);
+    // console.log(`Overflow calculated at: ${this.getTotalIncome() - this.getTotalSpent()}`);
+    this.updateBudget(budget);
   }
 
   getCategoryNames(parent: string): Category[] {

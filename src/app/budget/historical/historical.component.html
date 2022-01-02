@@ -1,0 +1,13 @@
+<div *ngIf="budgetShown != null && budgetShown != undefined">
+    <h1>{{budgetShown.date.toDate() | date: 'MMMM'}}'s Budget</h1>
+    <ul *ngIf="transactions != undefined && transactions.length > 0">
+        <li>Actual Income: {{transactionService.getTotalIncome(transactions) | currency}}</li>
+        <li>Total Spent: {{transactionService.getTotalSpent(transactions) | currency}}</li>
+        <ul>
+            <li>Internal: {{transactionService.getTotalSaved(transactions) | currency}}</li>
+            <li>External: {{transactionService.getTotalOutgoing(transactions) | currency}}</li>
+        </ul>
+        <li>Overflow into the next month: {{budgetShown.overflow | currency}}</li>
+    </ul>
+</div>
+

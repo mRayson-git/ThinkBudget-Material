@@ -2,7 +2,6 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { MenuItem } from 'src/app/models/menu-item';
 import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 
 @Component({
