@@ -27,6 +27,8 @@ export class CreatorComponent implements OnInit {
     category: new FormControl(''),
     amount: new FormControl(''),
     colour: new FormControl(''),
+    newCatParent: new FormControl(''),
+    newCatChild: new FormControl(''),
   });
 
   // Chart options information
@@ -65,9 +67,21 @@ export class CreatorComponent implements OnInit {
 
   updateBudget(): void {
     // Make the category
-    let category: Category = this.budgetAlterationForm.get('category')?.value;
+    // If not adding a new cat
+    let category: Category;
+    if (!this.isAddingNewCat()) {
+      category = this.budgetAlterationForm.get('category')?.value;
+    }
+    // If we are adding a new cat
+    else {
+      category = {
+        parent: this.budgetAlterationForm.get('newCatParent')?.value,
+        name: this.budgetAlterationForm.get('newCatChild')?.value
+      }
+    }
     category.amount = this.budgetAlterationForm.get('amount')?.value;
     category.colour = this.budgetAlterationForm.get('colour')?.value;
+    
     // Remove if it already exists
     this.budget!.categories = this.budget?.categories?.filter(budgetCategory => !(budgetCategory.parent == category.parent && budgetCategory.name == category.name)) || [];
     // Add in the category
@@ -111,6 +125,10 @@ export class CreatorComponent implements OnInit {
       lastMonth = new Date(this.currDate.getFullYear() - 1, 11);
     }
     return lastMonth;
+  }
+
+  isAddingNewCat(): boolean {
+    return this.budgetAlterationForm.get('category')?.value == "newCat";
   }
 
   buildChart(): void {

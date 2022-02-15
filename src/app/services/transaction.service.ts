@@ -119,7 +119,7 @@ export class TransactionService {
     transactions.forEach(transaction => {
       if (transaction.transCategory?.parent == category.parent && transaction.transCategory.name == category.name) total = total + transaction.transAmount;
     })
-    return total;
+    return Math.abs(total);
   }
 
   // get total saved

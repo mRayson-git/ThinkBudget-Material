@@ -31,9 +31,9 @@
         <div *ngFor="let parent of budgetService.getParentCategories(budget)">
             <h3 style="margin-bottom: 0;">{{parent}}</h3>
             <mat-list-item *ngFor="let category of budgetService.getCategoriesForParent(parent, budget)" class="flex-container-v">
-                <span mat-line>{{category.name}}: ({{getTotalForCategory(category) | currency}}/{{category.amount | currency}})</span>
-                <span mat-line *ngIf="getTotalForCategory(category) > category.amount!"><mat-progress-bar mode="determinate" value="{{getTotalForCategory(category)/category.amount!*100}}" color="warn"></mat-progress-bar></span>
-                <span mat-line *ngIf="getTotalForCategory(category) <= category.amount!"><mat-progress-bar mode="determinate" value="{{getTotalForCategory(category)/category.amount!*100}}" color="primary"></mat-progress-bar></span>
+                <span mat-line>{{category.name}}: ({{transactionService.getTotalSpentForCategory(transactions, category)| currency}}/{{category.amount | currency}})</span>
+                <span mat-line *ngIf="transactionService.getTotalSpentForCategory(transactions, category) > category.amount!"><mat-progress-bar mode="determinate" value="{{transactionService.getTotalSpentForCategory(transactions, category)/category.amount!*100}}" color="warn"></mat-progress-bar></span>
+                <span mat-line *ngIf="transactionService.getTotalSpentForCategory(transactions, category) <= category.amount!"><mat-progress-bar mode="determinate" value="{{transactionService.getTotalSpentForCategory(transactions, category)/category.amount!*100}}" color="primary"></mat-progress-bar></span>
             </mat-list-item>
             <mat-divider style="margin-bottom: 20px;"></mat-divider>
         </div>

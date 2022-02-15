@@ -81,7 +81,7 @@ export class OverviewComponent implements OnInit {
     let chartData: number[] = [];
     this.budgetService.getParentCategories(this.budget!).forEach(parent => {
       this.budgetService.getCategoriesForParent(parent, this.budget!).forEach(category => {
-        chartDataset.push([category.name, (category.amount! - Math.abs(this.transactionService.getTotalSpentForCategory(this.transactions!, category))).toString()])
+        chartDataset.push([category.name, (category.amount! - this.transactionService.getTotalSpentForCategory(this.transactions!, category)).toString()])
       });
     });
     this.chartOption = {

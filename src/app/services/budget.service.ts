@@ -56,6 +56,7 @@ export class BudgetService {
     { parent: 'Personal', name: 'Health' },
     { parent: 'Personal', name: 'Hobby' },
     { parent: 'Personal', name: 'Recreation' },
+    { parent: 'Personal', name: 'Animal Care' },
 
     // Savings
     { parent: 'Saving', name: 'Emergency Fund' },
@@ -161,7 +162,13 @@ export class BudgetService {
     this.updateBudget(budget);
   }
 
-  getCategoryNames(parent: string): Category[] {
-    return this.childCategories.filter(category => category.parent == parent);
+  getCategoryNames(parent: string, budget: Budget): Category[] {
+    let categoryNames: Category[] = [];
+    // get all categories that would normally be there
+    this.childCategories.filter(category => category.parent == parent).forEach(category => categoryNames.push(category));
+    // get all categories that are custom to the budget
+    budget.categories.filter(category => category.parent == parent && !categoryNames.includes(category)).forEach(category => categoryNames.push(category));
+    
+    return categoryNames;
   }
 }
