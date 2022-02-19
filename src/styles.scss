@@ -206,6 +206,31 @@ app-root{
     padding: 10px;
 }
 
+.page_title {
+    text-align: center;
+}
+
 .grid-container{
     display: grid;
+}
+
+// Small screen
+.grid_items {
+    display: grid;
+    grid-template-columns: 100%;
+    row-gap: 20px;
+    row-gap: 10px;
+}
+
+.grid_item {
+    padding: 10px;
+}
+
+// Medium to large screen
+@media only screen and (min-width: 640px) {
+    .grid_items{
+        display: grid;
+        column-gap: 10px;
+        grid-template-columns: 47.5% 47.5%;
+    }
 }

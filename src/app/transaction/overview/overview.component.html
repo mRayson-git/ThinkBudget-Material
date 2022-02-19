@@ -9,7 +9,7 @@
     <!-- Monthly Transactions Section -->
     <h3>{{currDate | date:'MMMM' }}'s Transactions</h3>
     <mat-card>
-        <mat-card-content>
+        <mat-card-content style="overflow: auto;">
             <div class="table-container">
                 <mat-table matSort [dataSource]="monthlyDataSource" *ngIf="monthlyDataSource">
                     <ng-container matColumnDef="account-name">
@@ -70,7 +70,7 @@
     <mat-icon>add</mat-icon>
 </button>
 <mat-card *ngIf="allDataSource">
-    <mat-card-content>
+    <mat-card-content style="overflow: auto;">
         <div class="table-container-all">
             <mat-table matSort [dataSource]="allDataSource" *ngIf="allDataSource">
                 <ng-container matColumnDef="account-name">

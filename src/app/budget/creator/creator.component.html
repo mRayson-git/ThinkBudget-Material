@@ -1,6 +1,6 @@
 <!-- Create a new budget -->
 <div *ngIf="budget == null">
-    <h1>Budget Creation for {{currDate | date:'MMMM'}}</h1>
+    <h1 class="page_title">Budget Creation for {{currDate | date:'MMMM'}}</h1>
     <!-- budget creation form -->
     <form [formGroup]="budgetIncomeForm" class="flex-container-v" (ngSubmit)="createBudget()">
         <mat-form-field appearance="fill">
@@ -35,10 +35,10 @@
 
 <!-- Edit existing budget -->
 <div *ngIf="budget && budget != null">
-    <h1>Budget Modification for {{currDate | date:'MMMM'}}</h1>
+    <h1 class="page_title">Budget Modification for {{currDate | date:'MMMM'}}</h1>
     
-    <div class="grid-container">
-        <div style="grid-column: 1; padding-right: 20px;">
+    <div class="grid_items">
+        <div class="grid_item">
             <ul class="budget-building-stats">
                 <li class="flex-container-h">
                     <span>Current Estimated Income:</span>
@@ -98,6 +98,7 @@
                     <input matInput type="text" formControlName="newCatChild">
                 </mat-form-field>
                 <mat-form-field appearance="fill">
+                    <span matPrefix>$ &nbsp;</span>
                     <input matInput type="number" formControlName="amount" placeholder="0.00">
                 </mat-form-field>
                 <!-- <mat-form-field appearance="fill">
@@ -111,19 +112,22 @@
                     <mat-icon>delete</mat-icon>
                 </button>
             </form>
-            <!-- <div *ngIf="chartOption">
-                <h1 style="text-align: center;">Current Budget (Visual)</h1>
-                <div echarts [options]="chartOption" class="chart"></div>
-            </div> -->
         </div>
-        <div style="grid-column: 2; padding-left: 20px;">
-            <h2>Current Budget</h2>
-            <ul *ngFor="let parent of budgetService.getParentCategories(budget)" class="budget-building-stats">
-                <li class="flex-container-h budget-building-header">{{parent}}</li>
-                <ul *ngFor="let category of budgetService.getCategoriesForParent(parent, budget)">
-                    <li class="flex-container-h"><span>{{category.name}}</span><span class="spacer"></span><span>{{category.amount | currency}}</span></li>
-                </ul>
-            </ul>
+        <div class="grid_item">        
+            <mat-card>
+                <mat-card-title>
+                    <span>Current Budget</span>
+                </mat-card-title>
+                <mat-card-content>
+                    <ul *ngFor="let parent of budgetService.getParentCategories(budget)" class="budget-building-stats">
+                        <li class="flex-container-h budget-building-header">{{parent}}</li>
+                        <ul *ngFor="let category of budgetService.getCategoriesForParent(parent, budget)">
+                            <li class="flex-container-h"><span>{{category.name}}</span><span class="spacer"></span><span>{{category.amount | currency}}</span></li>
+                        </ul>
+                    </ul>
+                </mat-card-content>
+            </mat-card>
+            
         </div>
     </div>
 </div>
