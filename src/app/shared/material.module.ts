@@ -24,7 +24,7 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatListModule} from '@angular/material/list';
 import {MatTreeModule} from '@angular/material/tree';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
-
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [],
@@ -55,6 +55,7 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
     MatListModule,
     MatTreeModule,
     MatProgressBarModule,
+    MatSnackBarModule,
   ]
 })
 export class MaterialModule { }

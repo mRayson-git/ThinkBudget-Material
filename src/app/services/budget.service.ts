@@ -156,9 +156,12 @@ export class BudgetService {
     return budget.income! - this.getTotalBudgeted(budget);
   }
 
-  calculateOverflow(budget: Budget, transactions: Transaction[]): void {
-    budget.overflow = this.transactionService.getTotalIncome(transactions) - this.transactionService.getTotalSpent(transactions);
-    // console.log(`Overflow calculated at: ${this.getTotalIncome() - this.getTotalSpent()}`);
+  calculateOverflow(budget: Budget, pastBudget: Budget | null, transactions: Transaction[]): void {
+    if (pastBudget?.overflow) {
+      budget.overflow = this.transactionService.getTotalIncome(transactions) - this.transactionService.getTotalSpent(transactions) + pastBudget.overflow;
+    } else {
+      budget.overflow = this.transactionService.getTotalIncome(transactions) - this.transactionService.getTotalSpent(transactions);
+    }
     this.updateBudget(budget);
   }
 

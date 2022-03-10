@@ -8,6 +8,7 @@ import { TransDialogComponent } from './trans-dialog/trans-dialog.component';
 import { ImportMenuComponent } from './import-menu/import-menu.component';
 import { SharedModule } from '../shared/shared.module';
 import { MaterialModule } from '../shared/material.module';
+import { HistoryComponent } from './history/history.component';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { MaterialModule } from '../shared/material.module';
     TransactionComponent,
     OverviewComponent,
     TransDialogComponent,
-    ImportMenuComponent
+    ImportMenuComponent,
+    HistoryComponent
   ],
   imports: [
     CommonModule,

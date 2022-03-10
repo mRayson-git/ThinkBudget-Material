@@ -1,7 +1,7 @@
 import { ValueConverter } from '@angular/compiler/src/render3/view/template';
 import { Component, OnInit } from '@angular/core';
 import { EChartsOption } from 'echarts';
-import { take } from 'rxjs';
+import { firstValueFrom, take } from 'rxjs';
 import { Budget } from 'src/app/models/budget';
 import { Category } from 'src/app/models/category';
 import { Transaction } from 'src/app/models/transaction';
@@ -25,22 +25,18 @@ export class OverviewComponent implements OnInit {
   constructor(public budgetService: BudgetService,
     public transactionService: TransactionService) { }
 
-  ngOnInit(): void {
-    this.budgetService.getMonthlyBudget(this.currDate).pipe(take(1)).subscribe(budget => {
-      this.budget = budget[0] || null;
-      if (this.budget != null) {
-        this.transactionService.getMonthlyTransactions(this.currDate)
-          .pipe(take(1)).subscribe(transactions => {
-            this.transactions = transactions;
-            this.budgetService.calculateOverflow(this.budget!, this.transactions);
-            this.buildChart();
-        });
-      }
-    });
-    this.budgetService.getMonthlyBudget(this.getLastMonth()).subscribe(budget => {
-      this.pastBudget = budget[0] || null;
-    });
+  async ngOnInit(): Promise<void> {
+    // get current month
+    this.budget = (await firstValueFrom(this.budgetService.getMonthlyBudget(this.currDate))).pop();
+    this.transactions = await firstValueFrom(this.transactionService.getMonthlyTransactions(this.currDate));
+    // get past month overflow
+    this.pastBudget = (await firstValueFrom(this.budgetService.getMonthlyBudget(this.getLastMonth()))).pop();
+    if (this.budget && this.pastBudget && this.transactions) {
+      this.budgetService.calculateOverflow(this.budget, this.pastBudget, this.transactions)
+    }
+    this.buildChart();    
   }
+  
   // get totals per category
   getTotalForCategory(category: Category): number {
     let total = 0;
@@ -50,6 +46,8 @@ export class OverviewComponent implements OnInit {
           total = total + Math.abs(transaction.transAmount);
       }
     });
+    // add the total to the budget stats
+    this.budget?.budgetStats?.categoryStats?.push({ category: category, totalSpent: total });
     return total;
   }
   // Update past month overflow
@@ -58,7 +56,7 @@ export class OverviewComponent implements OnInit {
     let pastTransactions: Transaction[];
     this.transactionService.getMonthlyTransactions(this.getLastMonth()).subscribe(transactions => {
       pastTransactions = transactions;
-      this.budgetService.calculateOverflow(this.pastBudget!, pastTransactions);
+      this.budgetService.calculateOverflow(this.pastBudget!, null, pastTransactions);
     });
   }
 

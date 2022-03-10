@@ -100,6 +100,18 @@ export class TransactionService {
     return collectionData(q, {idField: 'id' }) as Observable<Transaction[]>;
   }
 
+  getVariableTransactions(num: number): Observable<Transaction[]> {
+    const transactionCollectionRef = collection(this.firestore, `${this.currUser?.uid}/thinkbudget/transactions`);
+    const endDate = new Date();
+    const startDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate() - num);
+
+    let q = query(transactionCollectionRef,
+      where('transDate', '>=', Timestamp.fromDate(startDate)),
+      where('transDate', '<=', Timestamp.fromDate(endDate)),
+      orderBy('transDate', 'desc'));
+    return collectionData(q, {idField: 'id' }) as Observable<Transaction[]>;
+  }
+
 
   // Stat calculating methods 
   // get total spent
