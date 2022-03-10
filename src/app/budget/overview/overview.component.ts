@@ -103,7 +103,7 @@ export class OverviewComponent implements OnInit {
         type: 'bar',
       }],
       color: [
-        "#66ff99",
+        "#3b894a",
       ]
     }
   }
