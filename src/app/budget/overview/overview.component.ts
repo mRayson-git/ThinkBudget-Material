@@ -92,19 +92,17 @@ export class OverviewComponent implements OnInit {
       xAxis: { 
         type: 'category',
         axisLabel: {
-          align: 'center'
+          interval: 0,
+          rotate: 45,
         },
-        show: false
+        axisTick: {
+          alignWithLabel: true,
+        },
+        show: true,
       },
       yAxis: { },
       series: [{
         type: 'bar',
-        label: {
-          show: true,
-          position: 'bottom',
-          formatter: '{b}',
-          color: 'white'
-        },
       }],
       color: [
         "#66ff99",

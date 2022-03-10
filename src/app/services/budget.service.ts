@@ -163,12 +163,25 @@ export class BudgetService {
   }
 
   getCategoryNames(parent: string, budget: Budget): Category[] {
-    let categoryNames: Category[] = [];
+    let categories: Category[] = [];
+
     // get all categories that would normally be there
-    this.childCategories.filter(category => category.parent == parent).forEach(category => categoryNames.push(category));
-    // get all categories that are custom to the budget
-    budget.categories.filter(category => category.parent == parent && !categoryNames.includes(category)).forEach(category => categoryNames.push(category));
+    let normCategories = this.childCategories.filter(category => category.parent == parent);
+    // add in normalCategories
+    normCategories.forEach(category => categories.push(category));
+
+    // get all categories currently in budget
+    budget.categories.filter(category => category.parent == parent).forEach(budgetCategory => {
+      // check if category is already in array
+      let exists = true;
+      let stringBudgetCategory = JSON.stringify({ parent: budgetCategory.parent, name: budgetCategory.name });
+      normCategories.forEach(category => {
+        let stringCategory = JSON.stringify(category);
+        if (stringCategory == stringBudgetCategory) exists = true;
+      });
+      if (!exists) categories.push(budgetCategory);
+    });
     
-    return categoryNames;
+    return categories;
   }
 }

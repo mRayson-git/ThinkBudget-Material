@@ -65,8 +65,14 @@ export class CreatorComponent implements OnInit {
       .catch(err => console.log(err));
   }
 
+  updateIncome(): void {
+    this.budget!.income = Number(this.budgetAlterationForm.get('income')?.value);
+    this.budgetService.updateBudget(this.budget!)
+    .then(result => console.log(result))
+    .catch(error => console.log(error));
+  }
+
   updateBudget(): void {
-    // Make the category
     // If not adding a new cat
     let category: Category;
     if (!this.isAddingNewCat()) {

@@ -61,7 +61,7 @@
                     <span>{{budgetService.getRemaining(budget, pastBudget.overflow) | currency}}</span>
                 </li>
                 <li class="flex-container-h" *ngIf="!pastBudget || !pastBudget.overflow">
-                    <span>Remaining:</span>
+                    <span>Remaining to budget:</span>
                     <span class="spacer"></span>
                     <span>{{budgetService.getRemaining(budget) | currency}}</span>
                 </li>
@@ -73,7 +73,7 @@
                     <mat-label>Income</mat-label>
                     <input matInput type="number" formControlName="income">
                 </mat-form-field>
-                <button mat-raised-button color="primary" (click)="updateBudget()">UPDATE INCOME
+                <button mat-raised-button color="primary" type="button" (click)="updateIncome()">UPDATE INCOME
                     <mat-icon>update</mat-icon>
                 </button>
                 <mat-divider style="margin-top: 10px; margin-bottom: 30px;"></mat-divider>

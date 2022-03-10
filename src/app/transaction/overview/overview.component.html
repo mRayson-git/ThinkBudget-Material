@@ -26,11 +26,11 @@
                     </ng-container>
                     <ng-container matColumnDef="trans-amount-in">
                         <mat-header-cell *matHeaderCellDef>Inflow</mat-header-cell>
-                        <mat-cell *matCellDef="let element"><span *ngIf="element.transAmount >= 0">{{element.transAmount | currency}}</span></mat-cell>
+                        <mat-cell *matCellDef="let element"><span *ngIf="element.transAmount >= 0" class="pos">{{element.transAmount | currency}}</span></mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="trans-amount-out">
                         <mat-header-cell *matHeaderCellDef>Outflow</mat-header-cell>
-                        <mat-cell *matCellDef="let element"><span *ngIf="element.transAmount < 0">{{element.transAmount | currency}}</span></mat-cell>
+                        <mat-cell *matCellDef="let element"><span *ngIf="element.transAmount < 0" class="neg">{{element.transAmount | currency}}</span></mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="trans-date">
                         <mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by date">Date</mat-header-cell>
@@ -43,7 +43,7 @@
                     <ng-container matColumnDef="trans-note">
                         <mat-header-cell *matHeaderCellDef>Note</mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                            <mat-icon *ngIf="element.transNote; else noNote">sticky_note_2</mat-icon>
+                            <mat-icon *ngIf="element.transNote; else noNote" class="note">sticky_note_2</mat-icon>
                             <ng-template #noNote></ng-template>
                         </mat-cell>
                     </ng-container>
@@ -87,11 +87,11 @@
                 </ng-container>
                 <ng-container matColumnDef="trans-amount-in">
                     <mat-header-cell *matHeaderCellDef>Inflow</mat-header-cell>
-                    <mat-cell *matCellDef="let element"><span *ngIf="element.transAmount >= 0">{{element.transAmount | currency}}</span></mat-cell>
+                    <mat-cell *matCellDef="let element"><span *ngIf="element.transAmount >= 0" class="pos">{{element.transAmount | currency}}</span></mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="trans-amount-out">
                     <mat-header-cell *matHeaderCellDef>Outflow</mat-header-cell>
-                    <mat-cell *matCellDef="let element"><span *ngIf="element.transAmount < 0">{{element.transAmount | currency}}</span></mat-cell>
+                    <mat-cell *matCellDef="let element"><span *ngIf="element.transAmount < 0" class="neg">{{element.transAmount | currency}}</span></mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="trans-date">
                     <mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by date">Date</mat-header-cell>
@@ -104,7 +104,7 @@
                 <ng-container matColumnDef="trans-note">
                     <mat-header-cell *matHeaderCellDef>Note</mat-header-cell>
                     <mat-cell *matCellDef="let element">
-                        <mat-icon *ngIf="element.transNote; else noNote">sticky_note_2</mat-icon>
+                        <mat-icon *ngIf="element.transNote; else noNote" class="note">sticky_note_2</mat-icon>
                         <ng-template #noNote></ng-template>
                     </mat-cell>
                 </ng-container>

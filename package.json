@@ -5,6 +5,8 @@
     "ng": "ng",
     "start": "ng serve -o",
     "build": "ng build",
+    "deploy": "firebase deploy",
+    "firebase-login": "firebase login",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
