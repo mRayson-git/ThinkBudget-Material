@@ -29,6 +29,7 @@ export class OverviewComponent implements OnInit {
     this.transactionService.getMonthlyTransactions(this.currDate).subscribe(transactions => {
       console.log(transactions);
       this.monthlyDataSource = new MatTableDataSource(transactions);
+      this.monthlyDataSource.filterPredicate = this.customFilterPredicate();
     });
   }
 
@@ -59,7 +60,29 @@ export class OverviewComponent implements OnInit {
     this.searching = true;
     this.transactionService.getTransactions().subscribe(transactions => {
       this.allDataSource = new MatTableDataSource(transactions);
+      this.allDataSource.filterPredicate = this.customFilterPredicate();
       this.searching = false;
     });
+  }
+
+  applyFilter(event: Event, source: MatTableDataSource<Transaction>) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    console.log("Applying filter: " + filterValue);
+    source.filter = filterValue.trim().toLowerCase();
+  }
+
+  customFilterPredicate() {
+    const filterPredicate = (data: Transaction, filter: string): boolean => {
+      let accountNameFilter: boolean = data.bankAccountName.toLowerCase().trim().indexOf(filter) !== -1;
+      let payeeFilter: boolean = data.transPayee.toLowerCase().trim().indexOf(filter) !== -1;
+      let amountFilter: boolean = data.transAmount.toString().toLowerCase().trim().indexOf(filter) !== -1;
+      let catParentFilter: boolean = data.transCategory?.parent.toString().toLowerCase().trim().indexOf(filter) !== -1;
+      let catChildFilter: boolean = data.transCategory?.name.toString().toLowerCase().trim().indexOf(filter) !== -1;
+      let descFilter: boolean = data.transType.toLowerCase().trim().indexOf(filter) !== -1;
+      let noteFilter: boolean = data.transNote?.toLowerCase().trim().indexOf(filter) !== -1;
+
+      return  accountNameFilter || payeeFilter || amountFilter || catParentFilter || catChildFilter || descFilter || noteFilter;
+    }
+    return filterPredicate;
   }
 }

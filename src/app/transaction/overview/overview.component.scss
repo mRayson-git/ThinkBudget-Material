@@ -1,5 +1,6 @@
 .table-container {
   max-height: 300px;
+  min-height: 300px;
   min-width: 640px;
 }
 
@@ -9,47 +10,47 @@
 
 .mat-column-account-name {
   padding: 10px;
-  flex: 1 1 30px;
-  justify-content: center;
-}
-
-.mat-column-trans-type {
-  padding: 10px;
-  flex: 1 1 30px;
-  justify-content: center;
-}
-
-.mat-column-trans-amount-in {
-  padding: 10px;
-  flex: 0 1 50px;
-  justify-content: center;
-}
-.mat-column-trans-amount-out {
-  padding: 10px;
-  flex: 0 1 50px;
-  justify-content: center;
-}
-
-.mat-column-trans-date {
-  padding: 10px;
-  flex: 1 1 30px;
+  flex: 1 0 60px;
   justify-content: center;
 }
 
 .mat-column-trans-payee {
   padding: 10px;
-  flex: 1 1 30px;
+  flex: 1 0 50px;
+  justify-content: center;
+}
+
+.mat-column-trans-type {
+  padding: 10px;
+  flex: 1 0 50px;
+  justify-content: center;
+}
+
+.mat-column-trans-amount-in {
+  padding: 10px;
+  flex: 0 0 50px;
+  justify-content: center;
+}
+.mat-column-trans-amount-out {
+  padding: 10px;
+  flex: 0 0 50px;
+  justify-content: center;
+}
+
+.mat-column-trans-date {
+  padding: 10px;
+  flex: 1 0 50px;
   justify-content: center;
 }
 
 .mat-column-trans-category {
   padding: 10px;
-  flex: 1 1 30px;
+  flex: 1 0 50px;
   justify-content: center;
 }
 .mat-column-trans-note {
   padding: 10px;
-  flex: 0 0 30px;
+  flex: 0 0 50px;
   justify-content: center;
 }
 
@@ -62,5 +63,5 @@
 }
 
 .note {
-  color: rgb(226, 226, 113)
+  color: rgb(226, 226, 113);
 }

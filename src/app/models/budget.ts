@@ -1,5 +1,6 @@
 import { Timestamp } from "@angular/fire/firestore";
 import { Category } from "./category";
+import { CategoryStats } from "./categoryStats";
 
 export interface Budget {
     id?: string,
@@ -9,6 +10,7 @@ export interface Budget {
         totalIncome: number,
         totalSaved: number,
         totalSpent: number,
+        categoryStats?: CategoryStats[]
     },
     overflow?: number,
     categories: Category[]

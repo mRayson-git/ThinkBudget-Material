@@ -1,3 +1,4 @@
+<app-import-menu></app-import-menu>
 <h1>Overview</h1>
 <div *ngIf="!monthlyDataSource">
     <mat-spinner></mat-spinner>
@@ -9,6 +10,10 @@
     <!-- Monthly Transactions Section -->
     <h3>{{currDate | date:'MMMM' }}'s Transactions</h3>
     <mat-card>
+        <mat-form-field appearance="standard" style="width: 100%">
+            <mat-label>Filter</mat-label>
+            <input matInput (keyup)="applyFilter($event, monthlyDataSource!)" placeholder="Ex. Payroll" #input>
+        </mat-form-field>
         <mat-card-content style="overflow: auto;">
             <div class="table-container">
                 <mat-table matSort [dataSource]="monthlyDataSource" *ngIf="monthlyDataSource">
@@ -25,15 +30,15 @@
                         <mat-cell *matCellDef="let element">{{element.transType | uppercase}}</mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="trans-amount-in">
-                        <mat-header-cell *matHeaderCellDef>Inflow</mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef>Deposit</mat-header-cell>
                         <mat-cell *matCellDef="let element"><span *ngIf="element.transAmount >= 0" class="pos">{{element.transAmount | currency}}</span></mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="trans-amount-out">
-                        <mat-header-cell *matHeaderCellDef>Outflow</mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef>Withdrawl</mat-header-cell>
                         <mat-cell *matCellDef="let element"><span *ngIf="element.transAmount < 0" class="neg">{{element.transAmount | currency}}</span></mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="trans-date">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by date">Date</mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
                         <mat-cell *matCellDef="let element">{{element.transDate.toDate() | date | uppercase}}</mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="trans-category">
@@ -70,6 +75,10 @@
     <mat-icon>add</mat-icon>
 </button>
 <mat-card *ngIf="allDataSource">
+    <mat-form-field appearance="standard" style="width: 100%">
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event, allDataSource)" placeholder="Ex. Payroll" #input>
+    </mat-form-field>
     <mat-card-content style="overflow: auto;">
         <div class="table-container-all">
             <mat-table matSort [dataSource]="allDataSource" *ngIf="allDataSource">
@@ -86,11 +95,11 @@
                     <mat-cell *matCellDef="let element">{{element.transType | uppercase}}</mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="trans-amount-in">
-                    <mat-header-cell *matHeaderCellDef>Inflow</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef>Deposit</mat-header-cell>
                     <mat-cell *matCellDef="let element"><span *ngIf="element.transAmount >= 0" class="pos">{{element.transAmount | currency}}</span></mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="trans-amount-out">
-                    <mat-header-cell *matHeaderCellDef>Outflow</mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef>Withdrawl</mat-header-cell>
                     <mat-cell *matCellDef="let element"><span *ngIf="element.transAmount < 0" class="neg">{{element.transAmount | currency}}</span></mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="trans-date">

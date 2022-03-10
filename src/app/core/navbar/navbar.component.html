@@ -24,10 +24,15 @@
             <a mat-menu-item fxHide.xs routerLink="/budget/create">Create/Edit</a>
         </mat-menu>
         <!-- Transactions -->
-        <button mat-button fxHide.xs routerLink="/transaction">
+        <button mat-button fxHide.xs [matMenuTriggerFor]="transactionMenu">
             <mat-icon>attach_money</mat-icon>
             Transactions
         </button>
+        <mat-menu #transactionMenu>
+            <a mat-menu-item fxHide.xs routerLink="/transaction">Overview</a>
+            <mat-divider></mat-divider>
+            <a mat-menu-item fxHide.xs routerLink="/transaction/history">History</a>
+        </mat-menu>
         <!-- Logout -->
         <button mat-button fxHide.xs (click)="logout()">
             <mat-icon>logout</mat-icon>
@@ -61,10 +66,15 @@
             </mat-menu>
             <mat-divider></mat-divider>
             <!-- Transactions -->
-            <button mat-menu-item fxShow.xs routerLink="/transaction">
+            <button mat-menu-item fxShow.xs [matMenuTriggerFor]="transactionSubMenu">
                 <mat-icon>attach_money</mat-icon>
                 Transactions
             </button>
+            <mat-menu #transactionSubMenu>
+                <a mat-menu-item fxShow.xs routerLink="/transaction">Overview</a>
+                <mat-divider></mat-divider>
+                <a mat-menu-item fxShow.xs routerLink="/transaction/history">History</a>
+            </mat-menu>
             <mat-divider></mat-divider>
             <!-- Logout -->
             <button mat-menu-item fxShow.xs (click)="logout()">

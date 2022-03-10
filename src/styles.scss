@@ -234,3 +234,14 @@ app-root{
         grid-template-columns: 47.5% 47.5%;
     }
 }
+/////////////////////
+// Snackbar classes//
+/////////////////////
+.mat-snack-bar-container.success {
+    text-align: center;
+    background-color: rgb(86, 226, 86);
+}
+.mat-snack-bar-container.danger {
+    text-align: center;
+    background-color: rgb(212, 123, 123);
+}

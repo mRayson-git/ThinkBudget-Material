@@ -84,7 +84,7 @@
                             <mat-option *ngFor="let category of budgetService.getCategoryNames(parent, budget)" [value]="category">{{category.name}}</mat-option>
                         </mat-optgroup>
                         <mat-divider></mat-divider>
-                        <mat-option value="newCat">ADD A NEW CATEGORY</mat-option>
+                        <mat-option value="newCat">New Category...</mat-option>
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field appearance="fill" *ngIf="isAddingNewCat()">
@@ -105,8 +105,13 @@
                     <mat-label>Colour</mat-label>
                     <input matInput type="color" formControlName="colour">
                 </mat-form-field> -->
-                <button mat-raised-button color="primary" type="submit">ADD TO BUDGET
+                <button mat-raised-button color="primary" type="submit" *ngIf="!hasCategory(budgetAlterationForm.get('category')?.value)">
+                    <span>ADD TO BUDGET</span>
                     <mat-icon>add</mat-icon>
+                </button>
+                <button mat-raised-button color="primary" type="submit" *ngIf="hasCategory(budgetAlterationForm.get('category')?.value)">
+                    <span>UPDATE CATEGORY</span>
+                    <mat-icon>edit</mat-icon>
                 </button>
                 <button mat-raised-button color="warn" (click)="removeCategory(budgetAlterationForm.get('category')?.value)" style="margin-top: 10px;" *ngIf="hasCategory(budgetAlterationForm.get('category')?.value)">REMOVE
                     <mat-icon>delete</mat-icon>
