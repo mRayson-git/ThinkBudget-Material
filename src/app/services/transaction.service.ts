@@ -89,6 +89,15 @@ export class TransactionService {
     return collectionData(q, {idField: 'id' }) as Observable<Transaction[]>;
   }
 
+  getTransactionsInTimeframe(periodStart: Date, periodEnd: Date): Observable<Transaction[]> {
+    const transactionCollectionRef = collection(this.firestore, `${this.currUser?.uid}/thinkbudget/transactions`);
+    let q = query(transactionCollectionRef,
+      where('transDate', '>=', Timestamp.fromDate(new Date(periodStart.getFullYear(), periodStart.getMonth()))),
+      where('transDate', '<', Timestamp.fromDate(new Date(periodEnd.getFullYear(), periodEnd.getMonth() + 1))),
+      orderBy('transDate', 'desc'));
+    return collectionData(q, {idField: 'id' }) as Observable<Transaction[]>;
+  }
+
   //get the transactions for a given month (int)
   getMonthlyTransactions(date: Date): Observable<Transaction[]> {
     // console.log(`Getting transactions from ${date} to ${new Date(date.getFullYear(), date.getMonth() + 1)}`);

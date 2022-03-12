@@ -54,21 +54,43 @@
                     </ng-container>
                     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                     <mat-row matRipple *matRowDef="let row; columns: displayedColumns;" (click)="editElement(row)"></mat-row>
+                    <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                        showFirstLastButtons 
+                        aria-label="Select page of periodic elements">
+                    </mat-paginator>
                 </mat-table>
             </div>
         </mat-card-content>
     </mat-card>
 </ng-template>
 <!-- All Transactions Section -->
-<div class="flex-container-h">
+<div>
     <h3>All Transactions</h3>
-    <button mat-icon-button color="primary" (click)="getAllTransactions()">
-        <mat-icon>refresh</mat-icon>
-    </button>
 </div>
+<!-- Form to select timeframe -->
+<form [formGroup]="allTransForm">
+    <mat-form-field appearance="fill">
+        <mat-label>Start Period</mat-label>
+        <mat-select formControlName="periodStart">
+            <mat-option *ngFor="let period of periods" [value]="period">{{period | date: "MMMM YYYY"}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <span class="spacer"></span>
+    <mat-form-field appearance="fill" style="margin-inline: 10px;">
+        <mat-label>End Period</mat-label>
+        <mat-select formControlName="periodEnd">
+            <mat-option *ngFor="let period of periods" [value]="period">{{period | date: "MMMM YYYY"}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <span class="spacer"></span>
+    <button mat-raised-button color="primary" (click)="getTransactions()">SEARCH
+        <mat-icon>search</mat-icon>
+    </button>
+</form>
+
 <!-- Has yet to load all transactions -->
 <div *ngIf="!allDataSource" style="margin-top: 0;">
-    <p style="margin-top: 0;">Press the refresh button above to retrieve all transactions.</p>
+    <p style="margin-top: 0;">Select a timeframe to retrieve transactions.</p>
 </div>
 <mat-spinner *ngIf="searching"></mat-spinner>
 <button mat-raised-button (click)="addTransaction()" color="primary" style="margin-bottom: 10px;" *ngIf="allDataSource">ADD TRANSACTION

@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatRow, MatTableDataSource } from '@angular/material/table';
 import { Transaction } from 'src/app/models/transaction';
@@ -12,6 +14,13 @@ import { TransDialogComponent } from '../trans-dialog/trans-dialog.component';
   styleUrls: ['./overview.component.scss']
 })
 export class OverviewComponent implements OnInit {
+
+  allTransForm: FormGroup = new FormGroup({
+    periodStart: new FormControl(''),
+    periodEnd: new FormControl('')
+  });
+
+  periods: Date[] = [];
 
   transactions?: Transaction[];
   displayedColumns: string[] = ['account-name', 'trans-payee', 'trans-type', 'trans-amount-in', 'trans-amount-out','trans-date', 'trans-category', 'trans-note'];
@@ -31,6 +40,7 @@ export class OverviewComponent implements OnInit {
       this.monthlyDataSource = new MatTableDataSource(transactions);
       this.monthlyDataSource.filterPredicate = this.customFilterPredicate();
     });
+    this.populatePeriodOptions();
   }
 
   abs(value: number): number {
@@ -56,9 +66,10 @@ export class OverviewComponent implements OnInit {
     });
   }
 
-  getAllTransactions(): void {
+  getTransactions(): void {
+    console.log("Getting transactions");
     this.searching = true;
-    this.transactionService.getTransactions().subscribe(transactions => {
+    this.transactionService.getTransactionsInTimeframe(this.allTransForm.get('periodStart')!.value, this.allTransForm.get('periodEnd')!.value).subscribe(transactions => {
       this.allDataSource = new MatTableDataSource(transactions);
       this.allDataSource.filterPredicate = this.customFilterPredicate();
       this.searching = false;
@@ -84,5 +95,17 @@ export class OverviewComponent implements OnInit {
       return  accountNameFilter || payeeFilter || amountFilter || catParentFilter || catChildFilter || descFilter || noteFilter;
     }
     return filterPredicate;
+  }
+
+  populatePeriodOptions(): void {
+    const currDate = new Date()
+    // goes through the years
+    for (let i = currDate.getFullYear(); i > 1999 ; i--) {
+      // goes through the months
+      for (let j = 11; j >= 0; j--) {
+        if (i == currDate.getFullYear() && j > currDate.getMonth()) j = currDate.getMonth();
+        this.periods.push(new Date(i, j));
+      }
+    }
   }
 }
