@@ -26,6 +26,8 @@ import {MatTreeModule} from '@angular/material/tree';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import {MatChipsModule} from '@angular/material/chips';
+
 
 @NgModule({
   declarations: [],
@@ -57,7 +59,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatTreeModule,
     MatProgressBarModule,
     MatSnackBarModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatChipsModule,
   ]
 })
 export class MaterialModule { }

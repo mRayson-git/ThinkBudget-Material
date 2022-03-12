@@ -31,11 +31,19 @@
                     </ng-container>
                     <ng-container matColumnDef="trans-amount-in">
                         <mat-header-cell *matHeaderCellDef>Deposit</mat-header-cell>
-                        <mat-cell *matCellDef="let element"><span *ngIf="element.transAmount >= 0" class="pos">{{element.transAmount | currency}}</span></mat-cell>
+                        <mat-cell *matCellDef="let element">
+                            <mat-chip-list>
+                                <mat-chip *ngIf="element.transAmount >= 0" color="primary" selected>{{element.transAmount | currency}}</mat-chip>
+                            </mat-chip-list>
+                        </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="trans-amount-out">
                         <mat-header-cell *matHeaderCellDef>Withdrawl</mat-header-cell>
-                        <mat-cell *matCellDef="let element"><span *ngIf="element.transAmount < 0" class="neg">{{element.transAmount | currency}}</span></mat-cell>
+                        <mat-cell *matCellDef="let element">
+                            <mat-chip-list>
+                                <mat-chip *ngIf="element.transAmount < 0" color="warn" selected>{{element.transAmount | currency}}</mat-chip>
+                            </mat-chip-list>
+                        </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="trans-date">
                         <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
@@ -54,10 +62,6 @@
                     </ng-container>
                     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                     <mat-row matRipple *matRowDef="let row; columns: displayedColumns;" (click)="editElement(row)"></mat-row>
-                    <mat-paginator [pageSizeOptions]="[5, 10, 20]"
-                        showFirstLastButtons 
-                        aria-label="Select page of periodic elements">
-                    </mat-paginator>
                 </mat-table>
             </div>
         </mat-card-content>
@@ -118,11 +122,19 @@
                 </ng-container>
                 <ng-container matColumnDef="trans-amount-in">
                     <mat-header-cell *matHeaderCellDef>Deposit</mat-header-cell>
-                    <mat-cell *matCellDef="let element"><span *ngIf="element.transAmount >= 0" class="pos">{{element.transAmount | currency}}</span></mat-cell>
+                    <mat-cell *matCellDef="let element">
+                        <mat-chip-list>
+                            <mat-chip *ngIf="element.transAmount >= 0" color="primary" selected>{{element.transAmount | currency}}</mat-chip>
+                        </mat-chip-list>
+                    </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="trans-amount-out">
                     <mat-header-cell *matHeaderCellDef>Withdrawl</mat-header-cell>
-                    <mat-cell *matCellDef="let element"><span *ngIf="element.transAmount < 0" class="neg">{{element.transAmount | currency}}</span></mat-cell>
+                    <mat-cell *matCellDef="let element">
+                        <mat-chip-list>
+                            <mat-chip *ngIf="element.transAmount < 0" color="warn" selected>{{element.transAmount | currency}}</mat-chip>
+                        </mat-chip-list>
+                    </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="trans-date">
                     <mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by date">Date</mat-header-cell>
