@@ -1,39 +1,37 @@
-<div class="container">
-    <h1>File Layouts</h1>
-    <div *ngIf="!parsers">
-        <mat-spinner></mat-spinner>
-    </div>
-    <div *ngIf="parsers && parsers.length == 0; else showParsers">
-        <p>You have not specified any csv file layouts for importing your transactions, please add them here.</p>
-        <button mat-raised-button color="primary" (click)="addLayout()">Add layout
-            <mat-icon>add</mat-icon>
-        </button>
-    </div>
-    <ng-template #showParsers>
-        <div class="flex-container-v">
-            <mat-card *ngFor="let parser of parsers" class="list-item" (click)="updateParser(parser)">
-                <mat-card-content>
-                    <div class="flex-container-h">
-                        <span>{{parser.profileName}}</span>
-                        <span class="spacer"></span>
-                        <button mat-icon-button color="primary" (click)="updateParser(parser)">
-                            <mat-icon>edit</mat-icon>
-                        </button>
-                        <button mat-icon-button color="warn" (click)="deleteParser(parser)">
-                            <mat-icon>delete</mat-icon>
-                        </button>
-                    </div> 
-                </mat-card-content>
-            </mat-card>
-            <mat-card>
-                <mat-card-content>
-                    <div class="center">
-                        <button mat-mini-fab color="primary" (click)="addLayout()">
-                            <mat-icon>add</mat-icon>
-                        </button>
-                    </div>
-                </mat-card-content>
-            </mat-card>
-        </div>
-    </ng-template>
+<h1>File Layouts</h1>
+<div *ngIf="!parsers">
+    <mat-spinner></mat-spinner>
 </div>
+<div *ngIf="parsers && parsers.length == 0; else showParsers">
+    <p>You have not specified any csv file layouts for importing your transactions, please add them here.</p>
+    <button mat-raised-button color="primary" (click)="addLayout()">Add layout
+        <mat-icon>add</mat-icon>
+    </button>
+</div>
+<ng-template #showParsers>
+    <div class="flex-container-v">
+        <mat-card *ngFor="let parser of parsers" class="list-item" (click)="updateParser(parser)">
+            <mat-card-content>
+                <div class="flex-container-h">
+                    <span>{{parser.profileName}}</span>
+                    <span class="spacer"></span>
+                    <button mat-icon-button color="primary" (click)="updateParser(parser)">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button color="warn" (click)="deleteParser(parser)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div> 
+            </mat-card-content>
+        </mat-card>
+        <mat-card>
+            <mat-card-content>
+                <div class="center">
+                    <button mat-mini-fab color="primary" (click)="addLayout()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</ng-template>
