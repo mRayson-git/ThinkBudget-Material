@@ -165,26 +165,25 @@ export class BudgetService {
     this.updateBudget(budget);
   }
 
-  getCategoryNames(parent: string, budget: Budget): Category[] {
+  /**
+   * Returns an array of all categories
+   * @param budget The custom categories to add
+   */
+  getAllCategories(budget?: Budget): Category[] {
     let categories: Category[] = [];
-
     // get all categories that would normally be there
-    let normCategories = this.childCategories.filter(category => category.parent == parent);
-    // add in normalCategories
-    normCategories.forEach(category => categories.push(category));
-
-    // get all categories currently in budget
-    budget.categories.filter(category => category.parent == parent).forEach(budgetCategory => {
-      // check if category is already in array
-      let exists = true;
-      let stringBudgetCategory = JSON.stringify({ parent: budgetCategory.parent, name: budgetCategory.name });
-      normCategories.forEach(category => {
-        let stringCategory = JSON.stringify(category);
-        if (stringCategory == stringBudgetCategory) exists = true;
+    categories = this.childCategories;
+    // add in the custom categories
+    if (budget) {
+      budget.categories.forEach(budgetCategory => {
+        if (categories.findIndex(element => element.parent == budgetCategory.parent && element.name == budgetCategory.name) == -1) categories.push(budgetCategory);
       });
-      if (!exists) categories.push(budgetCategory);
-    });
+    }
     
     return categories;
+  }
+
+  getCategoriesForGivenParent(parent: string, allCategories: Category[]): Category[] {
+    return allCategories.filter(category => category.parent == parent);
   }
 }

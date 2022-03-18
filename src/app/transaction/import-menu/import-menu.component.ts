@@ -48,16 +48,17 @@ export class ImportMenuComponent implements OnInit {
       data.split('\n').forEach((row, index) => {
         if (!parser.hasHeader || parser.hasHeader && index !=0) {
           const temp = row.split(',');
-          console.log(temp);
           // check for empty row
+          console.log(temp);
           if (temp[0] != '') {
             const transaction: Transaction = {
               bankAccountName: parser.profileName,
               transAmount: Number(this.cleanString(temp[parser.amountCol-1])) || 0,
               transDate: Timestamp.fromDate(new Date(this.cleanString(temp[parser.dateCol-1]))),
-              transPayee: this.cleanString(temp[parser.payeeCol-1]) || '',
-              transType: this.cleanString(temp[parser.typeCol-1]) || ''
+              transPayee: this.cleanString(temp[parser.payeeCol-1], true) || '',
+              transType: this.cleanString(temp[parser.typeCol-1], true) || ''
             }
+            console.log(`pushing transaction ${transaction}`);
             transactions.push(transaction);
           }
         }
@@ -65,16 +66,35 @@ export class ImportMenuComponent implements OnInit {
     } catch (err) {
       console.log(err);
     }
+    console.log(transactions);
     this.transactionService.batchSave(transactions);
   }
 
-  cleanString(string: string): string {
+  cleanString(string: string, cleanAccount?: boolean): string {
     if (string) {
       string = string.split('$').join('');
       string = string.split('"').join('');
+      if (cleanAccount) string = this.cleanAccountNumber(string);
       return string;
     }
     return string;
+  }
+
+  cleanAccountNumber(string: string): string {
+    // split string into words / numbers
+    let strArray = string.split(' ');
+    strArray.forEach((element, index) => {
+      // if 9 digits
+      // console.log(element.length);
+      if (element.length == 9) {
+        try {
+          let number = Number.parseInt(element);
+          let end = element.slice(5, 9);
+          strArray[index] = "XXXXX" + end;
+        } catch (err) { }
+      }
+    })
+    return strArray.join(" ");
   }
 
 }

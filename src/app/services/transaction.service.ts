@@ -36,7 +36,7 @@ export class TransactionService {
       } else {
         // no transactions for this account in the system (1st import)
         transactions.forEach(transaction => {
-          console.log('Added transaction!');
+          console.log(`Adding transaction: ${JSON.stringify(transaction)}`);
           addDoc(transactionCollectionRef, transaction);
         });
       }

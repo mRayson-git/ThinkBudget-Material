@@ -5,6 +5,7 @@ import { Budget } from 'src/app/models/budget';
 import { Category } from 'src/app/models/category';
 import { BudgetService } from 'src/app/services/budget.service';
 import { EChartsOption } from 'echarts';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-creator',
@@ -17,6 +18,7 @@ export class CreatorComponent implements OnInit {
   currDate: Date = new Date();
   budget?: Budget | null;
   pastBudget?: Budget | null;
+  categories: Category[] = [];
 
   budgetIncomeForm: FormGroup = new FormGroup({
     income: new FormControl(''),
@@ -38,20 +40,18 @@ export class CreatorComponent implements OnInit {
 
   constructor(public budgetService: BudgetService) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     // get current budget
-    this.budgetService.getMonthlyBudget(this.currDate).subscribe(budget => {
-      this.budget = budget[0] || null;
-      if (this.budget != null) {
-        this.budgetAlterationForm.get('income')?.setValue(this.budget.income);
-      }
-      // get last months budget to account for overflow
-      this.budgetService.getMonthlyBudget(this.getLastMonth()).subscribe(budget => {
-        this.pastBudget = budget[0] || null;
-        this.buildChart();
-      });
-    });
-    
+    this.budget = (await firstValueFrom(this.budgetService.getMonthlyBudget(this.currDate))).pop();
+    // set income field value get categories
+    if (this.budget != null) {
+      this.budgetAlterationForm.get('income')?.setValue(this.budget.income);
+      this.categories = this.budgetService.getAllCategories(this.budget);
+    } else {
+      this.categories = this.budgetService.getAllCategories(this.budget);
+    }
+    // get last budget for overflow
+    this.pastBudget = (await firstValueFrom(this.budgetService.getMonthlyBudget(this.getLastMonth()))).pop();
   }
 
   createBudget(): void {
@@ -136,80 +136,4 @@ export class CreatorComponent implements OnInit {
   isAddingNewCat(): boolean {
     return this.budgetAlterationForm.get('category')?.value == "newCat";
   }
-
-  buildChart(): void {
-    let chartData: { value: number, name: string}[] = [];
-    let chartColours: string[] = [];
-    this.budget?.categories.forEach(category => {
-      chartData?.push({
-        name: category.name,
-        value: category.amount!
-      });
-    });
-    chartData.push({
-      value: this.budgetService.getRemaining(this.budget!, this.pastBudget?.overflow),
-      name: 'Remaining'
-    });
-    this.chartOption = {
-      tooltip: {
-        trigger: 'item'
-      },
-      series: [
-        {
-          name: 'Budget',
-          type: 'pie',
-          radius: ['40%', '70%'],
-          avoidLabelOverlap: false,
-          itemStyle: {
-            borderRadius: 10,
-            borderColor: '#fff',
-            borderWidth: 2
-          },
-          label: {
-            show: false
-          },
-          labelLine: {
-            show: false
-          },
-          data: chartData
-        }
-      ],
-      color: [
-        "#e6ffee",
-        "#ccffdd",
-        "#b3ffcc",
-        "#99ffbb",
-        "#80ffaa",
-        "#66ff99",
-        "#4dff88",
-        "#33ff77",
-        "#1aff66",
-        "#00ff55",
-        "#00e64d",
-        "#00cc44",
-        "#00b33c",
-        "#009933",
-        "#00802b",
-        "#006622",
-        "#004d1a",
-        "#ccffcc",
-        "#b3ffb3",
-        "#99ff99",
-        "#80ff80",
-        "#66ff66",
-        "#4dff4d",
-        "#33ff33",
-        "#1aff1a",
-        "#00ff00",
-        "#00e600",
-        "#00cc00",
-        "#00b300",
-        "#009900",
-        "#008000",
-      ]
-    };
-  }
-  
-  
-
 }

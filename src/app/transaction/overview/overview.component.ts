@@ -36,7 +36,7 @@ export class OverviewComponent implements OnInit {
 
   ngOnInit(): void {
     this.transactionService.getMonthlyTransactions(this.currDate).subscribe(transactions => {
-      console.log(transactions);
+      // console.log(transactions);
       this.monthlyDataSource = new MatTableDataSource(transactions);
       this.monthlyDataSource.filterPredicate = this.customFilterPredicate();
     });
@@ -67,7 +67,6 @@ export class OverviewComponent implements OnInit {
   }
 
   getTransactions(): void {
-    console.log("Getting transactions");
     this.searching = true;
     this.transactionService.getTransactionsInTimeframe(this.allTransForm.get('periodStart')!.value, this.allTransForm.get('periodEnd')!.value).subscribe(transactions => {
       this.allDataSource = new MatTableDataSource(transactions);
@@ -78,7 +77,7 @@ export class OverviewComponent implements OnInit {
 
   applyFilter(event: Event, source: MatTableDataSource<Transaction>) {
     const filterValue = (event.target as HTMLInputElement).value;
-    console.log("Applying filter: " + filterValue);
+    // console.log("Applying filter: " + filterValue);
     source.filter = filterValue.trim().toLowerCase();
   }
 
