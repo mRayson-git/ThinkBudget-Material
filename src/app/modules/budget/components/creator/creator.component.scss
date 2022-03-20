@@ -1,3 +1,5 @@
+@import '/src/theme.scss';
+
 .budget-building-stats {
     font-size: 20px;
     margin: 0;
@@ -6,6 +8,10 @@
 
 .budget-building-header {
     margin-top: 10px;
+}
+
+.emphasis {
+    background-color: map-get($map: $mat-green, $key: 200);
 }
 
 .chart {

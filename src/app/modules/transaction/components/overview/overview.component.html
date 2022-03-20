@@ -9,7 +9,7 @@
 </div>
 <ng-template #showTransactions>
     <!-- Monthly Transactions Section -->
-    <h3>{{currDate | date:'MMMM' }}'s Transactions</h3>
+    <h2>{{currDate | date:'MMMM' }}'s Transactions</h2>
     <mat-card>
         <mat-form-field appearance="standard" style="width: 100%">
             <mat-label>Filter</mat-label>
@@ -69,9 +69,7 @@
     </mat-card>
 </ng-template>
 <!-- All Transactions Section -->
-<div>
-    <h3>All Transactions</h3>
-</div>
+<h2>All Transactions</h2>
 <!-- Form to select timeframe -->
 <form [formGroup]="allTransForm">
     <mat-form-field appearance="fill">

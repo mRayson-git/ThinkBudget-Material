@@ -1,3 +1,5 @@
+@import '/src/theme.scss';
+
 .table-container {
   max-height: 500px;
   min-height: 300px;
@@ -6,6 +8,10 @@
 
 .table-container-all {
   min-width: 640px;
+}
+
+.mat-row:nth-child(2n){
+  background-color: map-get($map: $mat-green, $key: 50);
 }
 
 .mat-column-account-name {

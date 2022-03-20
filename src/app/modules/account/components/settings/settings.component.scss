@@ -1,4 +1,10 @@
-.grid-container{
-    display: grid;
-    grid-template-columns: auto auto auto;
+form {
+    width: 50%;
+}
+
+//on small screen
+@media only screen and (max-width: 640px) {
+    form {
+        width: 100%;
+    }
 }

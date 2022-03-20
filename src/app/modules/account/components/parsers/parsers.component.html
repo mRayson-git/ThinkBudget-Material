@@ -9,33 +9,29 @@
     </button>
 </div>
 <ng-template #showParsers>
-    <mat-card class="parser-background">
-        <mat-card-content>
-            <div class="flex-container-v">
-                <mat-card *ngFor="let parser of parsers" class="list-item" (click)="updateParser(parser)">
-                    <mat-card-content>
-                        <div class="flex-container-h">
-                            <span>{{parser.profileName}}</span>
-                            <span class="spacer"></span>
-                            <button mat-icon-button color="primary" (click)="updateParser(parser)">
-                                <mat-icon>edit</mat-icon>
-                            </button>
-                            <button mat-icon-button color="warn" (click)="deleteParser(parser)">
-                                <mat-icon>delete</mat-icon>
-                            </button>
-                        </div> 
-                    </mat-card-content>
-                </mat-card>
-                <mat-card class="list-item">
-                    <mat-card-content>
-                        <div class="center">
-                            <button mat-mini-fab color="primary" (click)="addLayout()">
-                                <mat-icon>add</mat-icon>
-                            </button>
-                        </div>
-                    </mat-card-content>
-                </mat-card>
-            </div>
-        </mat-card-content>
-    </mat-card>
+    <div class="flex-container-v halved">
+        <mat-card class="list-item">
+            <mat-card-content>
+                <div class="center">
+                    <button mat-mini-fab color="primary" (click)="addLayout()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+            </mat-card-content>
+        </mat-card>
+        <mat-card *ngFor="let parser of parsers" class="list-item" (click)="updateParser(parser)">
+            <mat-card-content>
+                <div class="flex-container-h">
+                    <span>{{parser.profileName}}</span>
+                    <span class="spacer"></span>
+                    <button mat-icon-button color="primary" (click)="updateParser(parser)">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button color="warn" (click)="deleteParser(parser)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div> 
+            </mat-card-content>
+        </mat-card>
+    </div>
 </ng-template>
