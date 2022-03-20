@@ -1,73 +1,73 @@
-<div class="container">
-    <div *ngIf="budget == null">
-        <div class="flex-contain-h">
-            <span style="margin-right: 10px;">You don't have a budget set for this month.</span>
-            <button mat-raised-button routerLink="./create" color="primary">Create 
-                <mat-icon>add_circle</mat-icon>
-            </button>
-        </div>
-    </div>
-    <div *ngIf="budget && budget != null && transactions">
-        <h1>{{currDate | date:'MMMM'}}'s Budget</h1>
-        <button mat-raised-button *ngIf="pastBudget && pastBudget.overflow" (click)="updatePastMonthOverflow()">
-            <mat-icon>update</mat-icon>
-            UPDATE PAST MONTH'S OVERFLOW
+
+<div *ngIf="budget == null">
+    <div class="flex-contain-h">
+        <span style="margin-right: 10px;">You don't have a budget set for this month.</span>
+        <button mat-raised-button routerLink="./create" color="primary">Create 
+            <mat-icon>add_circle</mat-icon>
         </button>
-        <ul style="width: 30%;">
-            <li class="flex-container-h">
-                <span>Estimated Income: </span>
-                <span class="spacer"></span>
-                <span>{{budget.income | currency}}</span>
-            </li>
-            <li class="flex-container-h">
-                <span>Actual Income to date:</span>
-                <span class="spacer"></span>
-                <span>{{transactionService.getTotalIncome(transactions) | currency}}</span>
-            </li>
-            <li class="flex-container-h" *ngIf="pastBudget && pastBudget.overflow">
-                <span>Overflow from past month:</span>
-                <span class="spacer"></span>
-                <span>{{this.pastBudget.overflow | currency}}</span>
-            </li>
-            <li class="flex-container-h">
-                <span>Totel Spent: </span>
-                <span class="spacer"></span>
-                <span>{{transactionService.getTotalSpent(transactions) | currency}}</span>
-            </li>
-            <mat-divider style="margin-block: 5px;"></mat-divider>
-            <ul>
-                <li class="flex-container-h">
-                    <span>Internal:</span>
-                    <span class="spacer"></span>
-                    <span>{{transactionService.getTotalSaved(transactions) | currency}}</span>
-                </li>
-                <li class="flex-container-h">
-                    <span>External:</span>
-                    <span class="spacer"></span>
-                    <span>{{transactionService.getTotalOutgoing(transactions) | currency}}</span>
-                </li>
-            </ul>
-            <mat-divider style="margin-block: 5px;"></mat-divider>
-            <li class="flex-container-h">
-                <span>Total Overflow:</span>
-                <span class="spacer"></span>
-                <span>{{budget.overflow | currency}}</span>
-            </li>
-        </ul>
-        <div *ngIf="chartOption">
-            <div echarts [options]="chartOption" class="chart"></div>
-        </div>
-        <mat-list>
-            <mat-divider style="margin-bottom: 20px;"></mat-divider>
-            <div *ngFor="let parent of budgetService.getParentCategories(budget)">
-                <h3 style="margin-bottom: 0;">{{parent}}</h3>
-                <mat-list-item *ngFor="let category of budgetService.getCategoriesForParent(parent, budget)" class="flex-container-v">
-                    <span mat-line>{{category.name}}: ({{transactionService.getTotalSpentForCategory(transactions, category)| currency}}/{{category.amount | currency}})</span>
-                    <span mat-line *ngIf="transactionService.getTotalSpentForCategory(transactions, category) > category.amount!"><mat-progress-bar mode="determinate" value="{{transactionService.getTotalSpentForCategory(transactions, category)/category.amount!*100}}" color="warn"></mat-progress-bar></span>
-                    <span mat-line *ngIf="transactionService.getTotalSpentForCategory(transactions, category) <= category.amount!"><mat-progress-bar mode="determinate" value="{{transactionService.getTotalSpentForCategory(transactions, category)/category.amount!*100}}" color="primary"></mat-progress-bar></span>
-                </mat-list-item>
-                <mat-divider style="margin-bottom: 20px;"></mat-divider>
-            </div>
-        </mat-list>
     </div>
 </div>
+<div *ngIf="budget && budget != null && transactions">
+    <h1>{{currDate | date:'MMMM'}}'s Budget</h1>
+    <button mat-raised-button *ngIf="pastBudget && pastBudget.overflow" (click)="updatePastMonthOverflow()">
+        <mat-icon>update</mat-icon>
+        UPDATE PAST MONTH'S OVERFLOW
+    </button>
+    <ul>
+        <li class="flex-container-h">
+            <span>Estimated Income: </span>
+            <span class="spacer"></span>
+            <span>{{budget.income | currency}}</span>
+        </li>
+        <li class="flex-container-h">
+            <span>Actual Income to date:</span>
+            <span class="spacer"></span>
+            <span>{{transactionService.getTotalIncome(transactions) | currency}}</span>
+        </li>
+        <li class="flex-container-h" *ngIf="pastBudget && pastBudget.overflow">
+            <span>Overflow from past month:</span>
+            <span class="spacer"></span>
+            <span>{{this.pastBudget.overflow | currency}}</span>
+        </li>
+        <li class="flex-container-h">
+            <span>Totel Spent: </span>
+            <span class="spacer"></span>
+            <span>{{transactionService.getTotalSpent(transactions) | currency}}</span>
+        </li>
+        <mat-divider style="margin-block: 5px;"></mat-divider>
+        <ul>
+            <li class="flex-container-h">
+                <span>Internal:</span>
+                <span class="spacer"></span>
+                <span>{{transactionService.getTotalSaved(transactions) | currency}}</span>
+            </li>
+            <li class="flex-container-h">
+                <span>External:</span>
+                <span class="spacer"></span>
+                <span>{{transactionService.getTotalOutgoing(transactions) | currency}}</span>
+            </li>
+        </ul>
+        <mat-divider style="margin-block: 5px;"></mat-divider>
+        <li class="flex-container-h">
+            <span>Total Overflow:</span>
+            <span class="spacer"></span>
+            <span>{{budget.overflow | currency}}</span>
+        </li>
+    </ul>
+    <div *ngIf="chartOption">
+        <div echarts [options]="chartOption" class="chart"></div>
+    </div>
+    <mat-list>
+        <mat-divider style="margin-bottom: 20px;"></mat-divider>
+        <div *ngFor="let parent of budgetService.getParentCategories(budget)">
+            <h3 style="margin-bottom: 0;">{{parent}}</h3>
+            <mat-list-item *ngFor="let category of budgetService.getCategoriesForParent(parent, budget)" class="flex-container-v">
+                <span mat-line>{{category.name}}: ({{transactionService.getTotalSpentForCategory(transactions, category)| currency}}/{{category.amount | currency}})</span>
+                <span mat-line *ngIf="transactionService.getTotalSpentForCategory(transactions, category) > category.amount!"><mat-progress-bar mode="determinate" value="{{transactionService.getTotalSpentForCategory(transactions, category)/category.amount!*100}}" color="warn"></mat-progress-bar></span>
+                <span mat-line *ngIf="transactionService.getTotalSpentForCategory(transactions, category) <= category.amount!"><mat-progress-bar mode="determinate" value="{{transactionService.getTotalSpentForCategory(transactions, category)/category.amount!*100}}" color="primary"></mat-progress-bar></span>
+            </mat-list-item>
+            <mat-divider style="margin-bottom: 20px;"></mat-divider>
+        </div>
+    </mat-list>
+</div>
+

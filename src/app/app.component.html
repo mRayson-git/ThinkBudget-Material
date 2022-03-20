@@ -1,7 +1,5 @@
-<div [class.dark-theme]="isDarkTheme" class="mat-app-background" style="min-height: 100%;">
-    <app-navbar (toggleTheme)="toggleTheme()"></app-navbar>
-    <div style="height: 100%;">
-        <router-outlet></router-outlet>
-    </div>
-    <app-footer></app-footer>
+<app-navbar></app-navbar>
+<div style="height: 100%;">
+    <router-outlet></router-outlet>
 </div>
+<!-- <app-footer></app-footer> -->

@@ -5,8 +5,10 @@ import { OverviewComponent } from './components/overview/overview.component';
 import { TransactionComponent } from './transaction.component';
 
 const routes: Routes = [
-  { path: '', component: OverviewComponent },
-  { path: 'history', component: HistoryComponent}
+  { path: '', component: TransactionComponent, children: [
+    { path: 'history', component: HistoryComponent},
+    { path: 'overview', component: OverviewComponent }
+  ]},
 ];
 
 @NgModule({

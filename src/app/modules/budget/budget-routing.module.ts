@@ -6,9 +6,11 @@ import { HistoricalComponent } from './components/historical/historical.componen
 import { OverviewComponent } from './components/overview/overview.component';
 
 const routes: Routes = [
-  { path: '', component: OverviewComponent },
-  { path: 'create', component: CreatorComponent },
-  { path: 'historical', component: HistoricalComponent }
+  { path: '', component: BudgetComponent, children: [
+    { path: 'overview', component: OverviewComponent },
+    { path: 'create', component: CreatorComponent },
+    { path: 'historical', component: HistoricalComponent }
+  ]}
 ];
 
 @NgModule({

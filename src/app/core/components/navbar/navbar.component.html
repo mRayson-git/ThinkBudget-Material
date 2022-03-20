@@ -1,128 +1,89 @@
-<!-- TODO: Proper wrapping when on mobile view -->
-<mat-toolbar color="primary" fxLayout="row">
-    <span fxFlex>thinkbudget</span>
-    <!-- if logged in -->
-    <div *ngIf="auth.currentUser && auth.currentUser != null">
-        <!-- Account -->
-        <button mat-button fxHide.xs [matMenuTriggerFor]="accountMenu">
-            <mat-icon>account_circle</mat-icon>
-            Account
-        </button>
-        <mat-menu #accountMenu>
-            <a mat-menu-item fxHide.xs routerLink="/account">Account</a>
-            <button mat-menu-item (click)="toggleTheme.emit()">Toggle Theme</button>
-        </mat-menu>
-        
-        <!-- Budget -->
-        <button mat-button fxHide.xs [matMenuTriggerFor]="budgetMenu">
-            <mat-icon>attach_money</mat-icon>
-            Budget
-        </button>
-        <mat-menu #budgetMenu>
-            <a mat-menu-item fxHide.xs routerLink="/budget">Overview</a>
-            <mat-divider></mat-divider>
-            <a mat-menu-item fxHide.xs routerLink="/budget/create">Create/Edit</a>
-        </mat-menu>
-        <!-- Transactions -->
-        <button mat-button fxHide.xs [matMenuTriggerFor]="transactionMenu">
-            <mat-icon>attach_money</mat-icon>
-            Transactions
-        </button>
-        <mat-menu #transactionMenu>
-            <a mat-menu-item fxHide.xs routerLink="/transaction">Overview</a>
-            <mat-divider></mat-divider>
-            <a mat-menu-item fxHide.xs routerLink="/transaction/history">History</a>
-        </mat-menu>
-        <!-- Logout -->
-        <button mat-button fxHide.xs (click)="logout()">
-            <mat-icon>logout</mat-icon>
-            Logout
-        </button>
-        <!-- Dropdown -->
-        <button mat-icon-button [matMenuTriggerFor]="dropMenu" fxHide fxShow.xs>
-            <mat-icon>more_vert</mat-icon>
-        </button>
-        <mat-menu #dropMenu>
-            <!-- Account -->
-            <button mat-menu-item fxShow.xs [matMenuTriggerFor]="accountSubMenu">
+<mat-toolbar color="primary" (window:resize)="onResize($event)">
+    <mat-toolbar-row class="emphasis">
+        <span>thinkbudget</span>
+        <span class="spacer"></span>
+        <!-- if not authenticated -->
+        <span *ngIf="!auth.currentUser">
+            <button type="button" mat-button routerLink="{{loginBtn.route}}">
+                <mat-icon>{{loginBtn.icon}}</mat-icon>
+                {{loginBtn.label}}
+            </button>
+        </span>
+        <!-- if authenticated, not mobile -->
+        <span *ngIf="auth.currentUser && auth.currentUser != null && !isMobile">
+            <button type="button" mat-button [mat-menu-trigger-for]="accountMenu">
                 <mat-icon>account_circle</mat-icon>
                 Account
             </button>
-            <mat-menu #accountSubMenu>
-                <a mat-menu-item fxShow.xs routerLink="/account">Account</a>
-                <button mat-menu-item fxShow.xs (click)="toggleTheme.emit()">Toggle Theme</button>
+            <mat-menu #accountMenu>
+                <button type="button" mat-menu-item routerLink="{{accountInfoBtn.route}}">
+                    <mat-icon>{{accountInfoBtn.icon}}</mat-icon>
+                    {{accountInfoBtn.label}}
+                </button>
+                <button type="button" mat-menu-item>
+                    <mat-icon>format_color_fill</mat-icon>
+                    Theme
+                </button>
             </mat-menu>
-            
-            <mat-divider></mat-divider>
-            <!-- Budget -->
-            <button mat-menu-item fxShow.xs [matMenuTriggerFor]="budgetSubMenu">
-                <mat-icon>attach_money</mat-icon>
+            <button type="button" mat-button [mat-menu-trigger-for]="budgetMenu">
+                <mat-icon>bar_chart</mat-icon>
                 Budget
             </button>
-            <mat-menu #budgetSubMenu>
-                <a mat-menu-item fxShow.xs routerLink="/budget">Overview</a>
-                <mat-divider></mat-divider>
-                <a mat-menu-item fxShow.xs routerLink="/budget/create">Create/Edit</a>
+            <mat-menu #budgetMenu>
+                <button type="button" mat-menu-item routerLink="{{budgetOverviewBtn.route}}">
+                    <mat-icon>{{budgetOverviewBtn.icon}}</mat-icon>
+                    {{budgetOverviewBtn.label}}
+                </button>
+                <button type="button" mat-menu-item routerLink="{{budgetCreateBtn.route}}">
+                    <mat-icon>{{budgetCreateBtn.icon}}</mat-icon>
+                    {{budgetCreateBtn.label}}
+                </button>
             </mat-menu>
-            <mat-divider></mat-divider>
-            <!-- Transactions -->
-            <button mat-menu-item fxShow.xs [matMenuTriggerFor]="transactionSubMenu">
-                <mat-icon>attach_money</mat-icon>
-                Transactions
+            <button type="button" mat-button routerLink="{{transactionOverviewBtn.route}}">
+                <mat-icon>{{transactionOverviewBtn.icon}}</mat-icon>
+                {{transactionOverviewBtn.label}}
             </button>
-            <mat-menu #transactionSubMenu>
-                <a mat-menu-item fxShow.xs routerLink="/transaction">Overview</a>
-                <mat-divider></mat-divider>
-                <a mat-menu-item fxShow.xs routerLink="/transaction/history">History</a>
-            </mat-menu>
-            <mat-divider></mat-divider>
-            <!-- Logout -->
-            <button mat-menu-item fxShow.xs (click)="logout()">
-                <mat-icon>logout</mat-icon>
-                Logout
-            </button>
-        </mat-menu>
-    </div>
-    <div *ngIf="!auth.currentUser">
-        <button mat-button (click)="login()">
-            <mat-icon>login</mat-icon>
-            Login
+        </span>
+        <button type="button" mat-button routerLink="{{logoutBtn.route}}" (click)="logout()" *ngIf="auth.currentUser && auth.currentUser != null">
+            <mat-icon>{{logoutBtn.icon}}</mat-icon>
+            {{logoutBtn.label}}
         </button>
-    </div>
-    
+    </mat-toolbar-row>
+    <!-- If authenticated and on mobile -->
+    <mat-toolbar-row *ngIf="auth.currentUser && auth.currentUser != null && isMobile">
+        <span>
+            <button type="button" mat-button [mat-menu-trigger-for]="accountMenu">
+                <mat-icon>account_circle</mat-icon>
+                Account
+            </button>
+            <mat-menu #accountMenu>
+                <button type="button" mat-menu-item routerLink="{{accountInfoBtn.route}}">
+                    <mat-icon>{{accountInfoBtn.icon}}</mat-icon>
+                    {{accountInfoBtn.label}}
+                </button>
+                <button type="button" mat-menu-item>
+                    <mat-icon>format_color_fill</mat-icon>
+                    Theme
+                </button>
+            </mat-menu>
+            <button type="button" mat-button [mat-menu-trigger-for]="budgetMenu">
+                <mat-icon>bar_chart</mat-icon>
+                Budget
+            </button>
+            <mat-menu #budgetMenu>
+                <button type="button" mat-menu-item routerLink="{{budgetOverviewBtn.route}}">
+                    <mat-icon>{{budgetOverviewBtn.icon}}</mat-icon>
+                    {{budgetOverviewBtn.label}}
+                </button>
+                <button type="button" mat-menu-item routerLink="{{budgetCreateBtn.route}}">
+                    <mat-icon>{{budgetCreateBtn.icon}}</mat-icon>
+                    {{budgetCreateBtn.label}}
+                </button>
+            </mat-menu>
+            <button type="button" mat-button routerLink="{{transactionOverviewBtn.route}}">
+                <mat-icon>{{transactionOverviewBtn.icon}}</mat-icon>
+                {{transactionOverviewBtn.label}}
+            </button>
+        </span>
+    </mat-toolbar-row>
 </mat-toolbar>
-
-
-    <!-- <div *ngIf="auth.currentUser">
-        <button mat-button [matMenuTriggerFor]="accountMenu">Account</button>
-        <mat-menu #accountMenu>
-            <a mat-menu-item routerLink="/account">Information</a>
-        </mat-menu>
-        <button mat-button [matMenuTriggerFor]="transactionMenu">Activity</button>
-        <mat-menu #transactionMenu>
-            <a mat-menu-item routerLink="/transaction">Overview</a>
-        </mat-menu>
-        <button mat-button [matMenuTriggerFor]="budgetMenu">Budget</button>
-        <mat-menu #budgetMenu>
-            <a mat-menu-item routerLink="/budget">Overview</a>
-            <mat-divider></mat-divider>
-            <a mat-menu-item routerLink="/budget/create">Create a budget</a>
-        </mat-menu>
-    </div>
-    <span class="spacer"></span>
-    <div *ngIf="auth.currentUser; else notLoggedIn">      
-        <button mat-button (click)="logout()">Logout
-            <mat-icon>logout</mat-icon>
-        </button>
-    </div>
-    <ng-template #notLoggedIn>
-        <button mat-button (click)="login()">Login 
-            <mat-icon>login</mat-icon>
-        </button>
-    </ng-template>
-    <button mat-icon-button [matMenuTriggerFor]="menu">
-        <mat-icon>menu</mat-icon>
-    </button>
-    <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="toggleTheme.emit()">Toggle Theme</button>
-    </mat-menu> -->

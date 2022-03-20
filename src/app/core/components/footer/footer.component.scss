@@ -1,13 +1,10 @@
-@import '../../../../styles.scss';
-
 .footer {
-    background-color: map-get($md-primary, 500);
+    background-color: white;
     border-top: 1px solid;
-    border-color: map-get($md-primary, 500);
+    border-color: black;
     position: relative;
     bottom: 0;
     left: 0;
     width: 100%;
     min-height: 90px;
-    color: map-get($md-primary, 50);
 }

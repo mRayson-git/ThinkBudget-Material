@@ -9,6 +9,8 @@ import { LayoutDialogComponent } from './components/parsers/layout-dialog/layout
 import { BudgetComponent } from './components/budget/budget.component';
 import { MaterialModule } from 'src/app/shared/material.module';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { AuthComponent } from './components/auth/auth.component';
+import { InfoComponent } from './components/info/info.component';
 
 
 @NgModule({
@@ -17,7 +19,9 @@ import { SharedModule } from 'src/app/shared/shared.module';
     SettingsComponent,
     ParsersComponent,
     LayoutDialogComponent,
-    BudgetComponent
+    BudgetComponent,
+    AuthComponent,
+    InfoComponent,
   ],
   imports: [
     CommonModule,

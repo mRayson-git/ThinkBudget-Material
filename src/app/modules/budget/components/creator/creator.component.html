@@ -1,140 +1,138 @@
-<div class="container">
-    <!-- Create a new budget -->
-    <div *ngIf="budget == null">
-        <h1 class="page_title">Budget Creation for {{currDate | date:'MMMM'}}</h1>
-        <!-- budget creation form -->
-        <form [formGroup]="budgetIncomeForm" class="flex-container-v" (ngSubmit)="createBudget()">
-            <mat-form-field appearance="fill">
-                <mat-label>Income</mat-label>
-                <input matInput type="number" formControlName="income">
-            </mat-form-field>
-            <button mat-raised-button type="submit" color="primary">CREATE BUDGET
-                <mat-icon>create</mat-icon>
-            </button>
-        </form>
+<!-- Create a new budget -->
+<div *ngIf="budget == null">
+    <h1 class="page_title">Budget Creation for {{currDate | date:'MMMM'}}</h1>
+    <!-- budget creation form -->
+    <form [formGroup]="budgetIncomeForm" class="flex-container-v" (ngSubmit)="createBudget()">
+        <mat-form-field appearance="fill">
+            <mat-label>Income</mat-label>
+            <input matInput type="number" formControlName="income">
+        </mat-form-field>
+        <button mat-raised-button type="submit" color="primary">CREATE BUDGET
+            <mat-icon>create</mat-icon>
+        </button>
+    </form>
 
-        <div *ngIf="pastBudget != null">
-            <h2>Import past month's budget</h2>
+    <div *ngIf="pastBudget != null">
+        <h2>Import past month's budget</h2>
+        <mat-card>
+            <mat-card-content >
+                <ul *ngFor="let parent of budgetService.getParentCategories(pastBudget)">
+                    <li>{{parent}}</li>
+                    <ul *ngFor="let category of budgetService.getCategoriesForParent(parent, pastBudget)">
+                        <li class="flex-container-h"><span>{{category.name}}</span><span class="spacer"></span><span>{{category.amount | currency}}</span></li>
+                    </ul>
+                </ul>
+            </mat-card-content>
+            <mat-card-actions fxLayout="row">
+                <button mat-raised-button color="primary" fxFill (click)="importPastBudget()">
+                    <mat-icon>add</mat-icon>
+                    IMPORT
+                </button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+</div>
+
+<!-- Edit existing budget -->
+<div *ngIf="budget && budget != null">
+    <h1 class="page_title">Budget Modification for {{currDate | date:'MMMM'}}</h1>
+    
+    <div class="grid_items">
+        <div class="grid_item">
+            <ul class="budget-building-stats">
+                <li class="flex-container-h">
+                    <span>Current Estimated Income:</span>
+                    <span class="spacer"></span>
+                    <span>{{budget?.income | currency}}</span>
+                </li>
+                <li class="flex-container-h" *ngIf="pastBudget && pastBudget?.overflow">
+                    <span>Current overflow from past month:</span>
+                    <span class="spacer"></span>
+                    <span>{{pastBudget?.overflow | currency}}</span>
+                </li>
+                <li class="flex-container-h">
+                    <span>Current Budgeted Total:</span>
+                    <span class="spacer"></span>
+                    <span>{{budgetService.getTotalBudgeted(budget) | currency}}</span>
+                </li>
+                <li class="flex-container-h" *ngIf="pastBudget && pastBudget.overflow">
+                    <span>Remaining:</span>
+                    <span class="spacer"></span>
+                    <span>{{budgetService.getRemaining(budget, pastBudget.overflow) | currency}}</span>
+                </li>
+                <li class="flex-container-h" *ngIf="!pastBudget || !pastBudget.overflow">
+                    <span>Remaining to budget:</span>
+                    <span class="spacer"></span>
+                    <span>{{budgetService.getRemaining(budget) | currency}}</span>
+                </li>
+            </ul>
+            <mat-divider style="margin-top: 10px; margin-bottom: 10px;"></mat-divider>
+            <!-- Edit income -->
+            <form [formGroup]="budgetAlterationForm" class="flex-container-v" (ngSubmit)="updateBudget()">
+                <mat-form-field appearance="fill">
+                    <mat-label>Income</mat-label>
+                    <input matInput type="number" formControlName="income">
+                </mat-form-field>
+                <button mat-raised-button color="primary" type="button" (click)="updateIncome()">UPDATE INCOME
+                    <mat-icon>update</mat-icon>
+                </button>
+                <mat-divider style="margin-top: 10px; margin-bottom: 30px;"></mat-divider>
+                <mat-form-field appearance="fill">
+                    <mat-label>Category</mat-label>
+                    <mat-select formControlName="category">
+                        <mat-optgroup *ngFor="let parent of budgetService.parentCategories" [label]="parent">
+                            <mat-option *ngFor="let category of budgetService.getCategoriesForGivenParent(parent, categories)" [value]="category">{{category.name}}</mat-option>
+                        </mat-optgroup>
+                        <mat-divider></mat-divider>
+                        <mat-option value="newCat">New Category...</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="fill" *ngIf="isAddingNewCat()">
+                    <mat-label>Category Parent</mat-label>
+                    <mat-select formControlName="newCatParent">
+                        <mat-option *ngFor="let parent of budgetService.parentCategories" [value]="parent">{{parent}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="fill" *ngIf="isAddingNewCat()">
+                    <mat-label>Category Name</mat-label>
+                    <input matInput type="text" formControlName="newCatChild">
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <span matPrefix>$ &nbsp;</span>
+                    <input matInput type="number" formControlName="amount" placeholder="0.00">
+                </mat-form-field>
+                <!-- <mat-form-field appearance="fill">
+                    <mat-label>Colour</mat-label>
+                    <input matInput type="color" formControlName="colour">
+                </mat-form-field> -->
+                <button mat-raised-button color="primary" type="submit" *ngIf="!hasCategory(budgetAlterationForm.get('category')?.value)">
+                    <span>ADD TO BUDGET</span>
+                    <mat-icon>add</mat-icon>
+                </button>
+                <button mat-raised-button color="primary" type="submit" *ngIf="hasCategory(budgetAlterationForm.get('category')?.value)">
+                    <span>UPDATE CATEGORY</span>
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-raised-button color="warn" (click)="removeCategory(budgetAlterationForm.get('category')?.value)" style="margin-top: 10px;" *ngIf="hasCategory(budgetAlterationForm.get('category')?.value)">REMOVE
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </form>
+        </div>
+        <div class="grid_item">        
             <mat-card>
-                <mat-card-content >
-                    <ul *ngFor="let parent of budgetService.getParentCategories(pastBudget)">
-                        <li>{{parent}}</li>
-                        <ul *ngFor="let category of budgetService.getCategoriesForParent(parent, pastBudget)">
+                <mat-card-title>
+                    <span>Current Budget</span>
+                </mat-card-title>
+                <mat-card-content>
+                    <ul *ngFor="let parent of budgetService.getParentCategories(budget)" class="budget-building-stats">
+                        <li class="flex-container-h budget-building-header">{{parent}}</li>
+                        <ul *ngFor="let category of budgetService.getCategoriesForParent(parent, budget)">
                             <li class="flex-container-h"><span>{{category.name}}</span><span class="spacer"></span><span>{{category.amount | currency}}</span></li>
                         </ul>
                     </ul>
                 </mat-card-content>
-                <mat-card-actions fxLayout="row">
-                    <button mat-raised-button color="primary" fxFill (click)="importPastBudget()">
-                        <mat-icon>add</mat-icon>
-                        IMPORT
-                    </button>
-                </mat-card-actions>
             </mat-card>
-        </div>
-    </div>
-
-    <!-- Edit existing budget -->
-    <div *ngIf="budget && budget != null">
-        <h1 class="page_title">Budget Modification for {{currDate | date:'MMMM'}}</h1>
-        
-        <div class="grid_items">
-            <div class="grid_item">
-                <ul class="budget-building-stats">
-                    <li class="flex-container-h">
-                        <span>Current Estimated Income:</span>
-                        <span class="spacer"></span>
-                        <span>{{budget?.income | currency}}</span>
-                    </li>
-                    <li class="flex-container-h" *ngIf="pastBudget && pastBudget?.overflow">
-                        <span>Current overflow from past month:</span>
-                        <span class="spacer"></span>
-                        <span>{{pastBudget?.overflow | currency}}</span>
-                    </li>
-                    <li class="flex-container-h">
-                        <span>Current Budgeted Total:</span>
-                        <span class="spacer"></span>
-                        <span>{{budgetService.getTotalBudgeted(budget) | currency}}</span>
-                    </li>
-                    <li class="flex-container-h" *ngIf="pastBudget && pastBudget.overflow">
-                        <span>Remaining:</span>
-                        <span class="spacer"></span>
-                        <span>{{budgetService.getRemaining(budget, pastBudget.overflow) | currency}}</span>
-                    </li>
-                    <li class="flex-container-h" *ngIf="!pastBudget || !pastBudget.overflow">
-                        <span>Remaining to budget:</span>
-                        <span class="spacer"></span>
-                        <span>{{budgetService.getRemaining(budget) | currency}}</span>
-                    </li>
-                </ul>
-                <mat-divider style="margin-top: 10px; margin-bottom: 10px;"></mat-divider>
-                <!-- Edit income -->
-                <form [formGroup]="budgetAlterationForm" class="flex-container-v" (ngSubmit)="updateBudget()">
-                    <mat-form-field appearance="fill">
-                        <mat-label>Income</mat-label>
-                        <input matInput type="number" formControlName="income">
-                    </mat-form-field>
-                    <button mat-raised-button color="primary" type="button" (click)="updateIncome()">UPDATE INCOME
-                        <mat-icon>update</mat-icon>
-                    </button>
-                    <mat-divider style="margin-top: 10px; margin-bottom: 30px;"></mat-divider>
-                    <mat-form-field appearance="fill">
-                        <mat-label>Category</mat-label>
-                        <mat-select formControlName="category">
-                            <mat-optgroup *ngFor="let parent of budgetService.parentCategories" [label]="parent">
-                                <mat-option *ngFor="let category of budgetService.getCategoriesForGivenParent(parent, categories)" [value]="category">{{category.name}}</mat-option>
-                            </mat-optgroup>
-                            <mat-divider></mat-divider>
-                            <mat-option value="newCat">New Category...</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                    <mat-form-field appearance="fill" *ngIf="isAddingNewCat()">
-                        <mat-label>Category Parent</mat-label>
-                        <mat-select formControlName="newCatParent">
-                            <mat-option *ngFor="let parent of budgetService.parentCategories" [value]="parent">{{parent}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                    <mat-form-field appearance="fill" *ngIf="isAddingNewCat()">
-                        <mat-label>Category Name</mat-label>
-                        <input matInput type="text" formControlName="newCatChild">
-                    </mat-form-field>
-                    <mat-form-field appearance="fill">
-                        <span matPrefix>$ &nbsp;</span>
-                        <input matInput type="number" formControlName="amount" placeholder="0.00">
-                    </mat-form-field>
-                    <!-- <mat-form-field appearance="fill">
-                        <mat-label>Colour</mat-label>
-                        <input matInput type="color" formControlName="colour">
-                    </mat-form-field> -->
-                    <button mat-raised-button color="primary" type="submit" *ngIf="!hasCategory(budgetAlterationForm.get('category')?.value)">
-                        <span>ADD TO BUDGET</span>
-                        <mat-icon>add</mat-icon>
-                    </button>
-                    <button mat-raised-button color="primary" type="submit" *ngIf="hasCategory(budgetAlterationForm.get('category')?.value)">
-                        <span>UPDATE CATEGORY</span>
-                        <mat-icon>edit</mat-icon>
-                    </button>
-                    <button mat-raised-button color="warn" (click)="removeCategory(budgetAlterationForm.get('category')?.value)" style="margin-top: 10px;" *ngIf="hasCategory(budgetAlterationForm.get('category')?.value)">REMOVE
-                        <mat-icon>delete</mat-icon>
-                    </button>
-                </form>
-            </div>
-            <div class="grid_item">        
-                <mat-card>
-                    <mat-card-title>
-                        <span>Current Budget</span>
-                    </mat-card-title>
-                    <mat-card-content>
-                        <ul *ngFor="let parent of budgetService.getParentCategories(budget)" class="budget-building-stats">
-                            <li class="flex-container-h budget-building-header">{{parent}}</li>
-                            <ul *ngFor="let category of budgetService.getCategoriesForParent(parent, budget)">
-                                <li class="flex-container-h"><span>{{category.name}}</span><span class="spacer"></span><span>{{category.amount | currency}}</span></li>
-                            </ul>
-                        </ul>
-                    </mat-card-content>
-                </mat-card>
-                
-            </div>
+            
         </div>
     </div>
 </div>
