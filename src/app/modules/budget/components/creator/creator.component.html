@@ -71,6 +71,7 @@
             <form [formGroup]="budgetAlterationForm" class="flex-container-v" (ngSubmit)="updateBudget()">
                 <mat-form-field appearance="fill">
                     <mat-label>Income</mat-label>
+                    <span matPrefix>$ &nbsp;</span>
                     <input matInput type="number" formControlName="income">
                 </mat-form-field>
                 <button mat-raised-button color="primary" type="button" (click)="updateIncome()">UPDATE INCOME

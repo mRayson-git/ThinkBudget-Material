@@ -61,7 +61,7 @@
                             <ng-template #noNote></ng-template>
                         </mat-cell>
                     </ng-container>
-                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></mat-header-row>
                     <mat-row matRipple *matRowDef="let row; columns: displayedColumns;" (click)="editElement(row)"></mat-row>
                 </mat-table>
             </div>
@@ -150,10 +150,9 @@
                         <ng-template #noNote></ng-template>
                     </mat-cell>
                 </ng-container>
-                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></mat-header-row>
                 <mat-row matRipple *matRowDef="let row; columns: displayedColumns;" (click)="editElement(row)"></mat-row>
             </mat-table>
         </div>
     </mat-card-content>
-</mat-card>    
-
+</mat-card>
